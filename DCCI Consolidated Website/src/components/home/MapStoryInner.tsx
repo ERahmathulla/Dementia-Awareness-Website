@@ -10,87 +10,21 @@ import { OUTREACH_COUNTIES } from '@/lib/data/counties'
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/positron'
 
-// Camera start: full Florida context (statewide)
 const CAMERA_START = { center: [-84.2, 27.0] as [number, number], zoom: 5.5 }
-// Camera end: centered on the county-seat bounding box midpoint to show all 9 labeled cities
 const CAMERA_END   = { center: [-84.234, 30.157] as [number, number], zoom: 8.3 }
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
 
 function lerp(a: number, b: number, t: number) { return a + (b - a) * t }
 
-// Smooth cubic easing for the camera transition
 function smoothstep(t: number) {
   const c = Math.max(0, Math.min(1, t))
   return c * c * (3 - 2 * c)
 }
 
-// ─── Marker CSS — injected once into document head ────────────────────────────
+// ─── Attribution CSS — injected once ─────────────────────────────────────────
 
-const MARKER_CSS = `
-  .map-county-marker {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    outline: none;
-  }
-  .map-county-marker-ring {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 2px solid #8347c0;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: opacity 0.18s ease, transform 0.18s ease;
-  }
-  .map-county-marker:hover .map-county-marker-ring,
-  .map-county-marker:focus-visible .map-county-marker-ring {
-    opacity: 0.55;
-    transform: scale(1.15);
-  }
-  .map-county-marker-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #8347c0;
-    border: 2.5px solid white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.22);
-    position: relative;
-    z-index: 1;
-    transition: transform 0.18s ease, background 0.18s ease;
-  }
-  .map-county-marker:hover .map-county-marker-dot,
-  .map-county-marker:focus-visible .map-county-marker-dot {
-    transform: scale(1.3);
-    background: #6b34a8;
-  }
-  .map-county-marker-label {
-    position: absolute;
-    bottom: calc(100% + 4px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    color: #2d2926;
-    font-size: 11px;
-    font-weight: 600;
-    font-family: inherit;
-    padding: 3px 10px;
-    border-radius: 9999px;
-    white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.13);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.15s ease;
-  }
-  .map-county-marker:hover .map-county-marker-label,
-  .map-county-marker:focus-visible .map-county-marker-label {
-    opacity: 1;
-  }
-  /* Attribution — compact, legible but unobtrusive */
+const ATTRIBUTION_CSS = `
   .maplibregl-ctrl-attrib {
     font-size: 10px !important;
     opacity: 0.6;
@@ -100,7 +34,7 @@ const MARKER_CSS = `
   .maplibregl-ctrl-bottom-right { z-index: 1; }
 `
 
-// ─── Public API (exposed to parent via onReady callback) ─────────────────────
+// ─── Public API ───────────────────────────────────────────────────────────────
 
 export interface MapStoryAPI {
   updateCamera: (progress: number) => void
@@ -120,8 +54,6 @@ interface Props {
 export default function MapStoryInner({ onReady, reducedMotion, className = '' }: Props) {
   const containerRef     = useRef<HTMLDivElement>(null)
   const mapRef           = useRef<maplibregl.Map | null>(null)
-  const markersRef       = useRef<HTMLElement[]>([])
-  // Capture props at mount time — effect runs once deliberately
   const onReadyRef       = useRef(onReady)
   const reducedMotionRef = useRef(reducedMotion)
   const router           = useRouter()
@@ -129,11 +61,10 @@ export default function MapStoryInner({ onReady, reducedMotion, className = '' }
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return
 
-    // Inject marker + attribution CSS once globally
     if (!document.getElementById('map-story-styles')) {
       const styleEl = document.createElement('style')
       styleEl.id = 'map-story-styles'
-      styleEl.textContent = MARKER_CSS
+      styleEl.textContent = ATTRIBUTION_CSS
       document.head.appendChild(styleEl)
     }
 
@@ -145,70 +76,124 @@ export default function MapStoryInner({ onReady, reducedMotion, className = '' }
       style:              STYLE_URL,
       center:             initCamera.center,
       zoom:               initCamera.zoom,
-      // All gestures disabled — scroll progress drives the camera.
-      // Keeping them off at the final stage avoids map scroll-zoom hijacking page scroll.
-      dragPan:            false,
+      dragPan:            true,
       dragRotate:         false,
-      scrollZoom:         false,
-      touchZoomRotate:    false,
-      doubleClickZoom:    false,
-      keyboard:           false,
-      boxZoom:            false,
-      // Attribution managed manually so we can position and style it
+      // scrollZoom hijacks page scroll on the animated map — keep off there
+      scrollZoom:         rm,
+      touchZoomRotate:    rm,
+      doubleClickZoom:    true,
+      keyboard:           true,
+      boxZoom:            true,
       attributionControl: false,
     })
 
-    map.addControl(
-      new maplibregl.AttributionControl({ compact: true }),
-      'bottom-right'
-    )
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right')
 
     map.on('load', () => {
-      const markerEls: HTMLElement[] = []
+      const initialVisibility = rm ? 'visible' : 'none'
 
-      OUTREACH_COUNTIES.forEach(county => {
-        // Build the marker element from plain DOM — avoids Tailwind purge issues
-        const el = document.createElement('div')
-        el.className = 'map-county-marker'
-        el.setAttribute('role', 'button')
-        el.setAttribute('tabindex', '0')
-        el.setAttribute('aria-label', `${county.name} County — View dementia outreach events`)
-        // Hidden until scroll reaches stage 3 (or always visible in reduced-motion mode)
-        el.style.display = rm ? 'flex' : 'none'
-
-        const ring = document.createElement('span')
-        ring.className = 'map-county-marker-ring'
-        ring.setAttribute('aria-hidden', 'true')
-
-        const dot = document.createElement('span')
-        dot.className = 'map-county-marker-dot'
-        dot.setAttribute('aria-hidden', 'true')
-
-        const label = document.createElement('span')
-        label.className = 'map-county-marker-label'
-        label.textContent = county.name
-        label.setAttribute('aria-hidden', 'true')
-
-        el.appendChild(ring)
-        el.appendChild(dot)
-        el.appendChild(label)
-
-        const navigate = () => router.push(county.path)
-        el.addEventListener('click', navigate)
-        el.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate() }
-        })
-
-        new maplibregl.Marker({ element: el })
-          .setLngLat([county.lng, county.lat])
-          .addTo(map)
-
-        markerEls.push(el)
+      // GeoJSON source — markers rendered on the WebGL canvas so they are
+      // immune to any CSS transform applied to the parent container.
+      map.addSource('counties', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: OUTREACH_COUNTIES.map((c, i) => ({
+            type: 'Feature' as const,
+            id: i,
+            geometry: { type: 'Point' as const, coordinates: [c.lng, c.lat] },
+            properties: { name: c.name, path: c.path },
+          })),
+        },
       })
 
-      markersRef.current = markerEls
+      // Hover ring
+      map.addLayer({
+        id: 'county-ring',
+        type: 'circle',
+        source: 'counties',
+        layout: { visibility: initialVisibility },
+        paint: {
+          'circle-radius': 16,
+          'circle-color': 'rgba(0,0,0,0)',
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#8347c0',
+          'circle-stroke-opacity': [
+            'case', ['boolean', ['feature-state', 'hover'], false], 0.55, 0,
+          ],
+        },
+      })
 
-      // Expose API to parent
+      // Dot
+      map.addLayer({
+        id: 'county-dot',
+        type: 'circle',
+        source: 'counties',
+        layout: { visibility: initialVisibility },
+        paint: {
+          'circle-radius': 7,
+          'circle-color': [
+            'case', ['boolean', ['feature-state', 'hover'], false], '#6b34a8', '#8347c0',
+          ],
+          'circle-stroke-width': 2.5,
+          'circle-stroke-color': '#ffffff',
+        },
+      })
+
+      // County name — visible only while hovering
+      map.addLayer({
+        id: 'county-label',
+        type: 'symbol',
+        source: 'counties',
+        layout: {
+          visibility: initialVisibility,
+          'text-field': ['get', 'name'],
+          'text-size': 11,
+          'text-anchor': 'bottom',
+          'text-offset': [0, -1.4],
+          'text-font': ['Noto Sans Regular', 'Arial Unicode MS Regular'],
+        },
+        paint: {
+          'text-color': '#2d2926',
+          'text-halo-color': '#ffffff',
+          'text-halo-width': 2,
+          'text-opacity': [
+            'case', ['boolean', ['feature-state', 'hover'], false], 1, 0,
+          ],
+        },
+      })
+
+      // ── Interactivity ──────────────────────────────────────────────────────
+      let hoveredId: number | string | null = null
+
+      map.on('mousemove', 'county-dot', (e) => {
+        if (!e.features?.length) return
+        map.getCanvas().style.cursor = 'pointer'
+        const id = e.features[0].id as number
+        if (id !== hoveredId) {
+          if (hoveredId !== null) {
+            map.setFeatureState({ source: 'counties', id: hoveredId }, { hover: false })
+          }
+          hoveredId = id
+          map.setFeatureState({ source: 'counties', id: hoveredId }, { hover: true })
+        }
+      })
+
+      map.on('mouseleave', 'county-dot', () => {
+        map.getCanvas().style.cursor = ''
+        if (hoveredId !== null) {
+          map.setFeatureState({ source: 'counties', id: hoveredId }, { hover: false })
+          hoveredId = null
+        }
+      })
+
+      map.on('click', 'county-dot', (e) => {
+        const path = e.features?.[0]?.properties?.path as string | undefined
+        if (path) router.push(path)
+      })
+
+      // ── Expose API to parent ───────────────────────────────────────────────
       onReadyRef.current({
         updateCamera(progress: number) {
           if (rm || !mapRef.current) return
@@ -222,17 +207,17 @@ export default function MapStoryInner({ onReady, reducedMotion, className = '' }
           })
         },
         showMarkers(show: boolean) {
-          markersRef.current.forEach(el => {
-            el.style.display = show ? 'flex' : 'none'
-          })
+          if (!mapRef.current) return
+          const vis = show ? 'visible' : 'none'
+          mapRef.current.setLayoutProperty('county-dot',   'visibility', vis)
+          mapRef.current.setLayoutProperty('county-ring',  'visibility', vis)
+          mapRef.current.setLayoutProperty('county-label', 'visibility', vis)
         },
       })
     })
 
     mapRef.current = map
-
     return () => {
-      markersRef.current = []
       map.remove()
       mapRef.current = null
     }
