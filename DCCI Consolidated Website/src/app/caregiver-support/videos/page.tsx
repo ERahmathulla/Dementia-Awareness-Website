@@ -14,7 +14,7 @@ const videos: Video[] = [
   { title: 'What is Safe Sitting?', source: "Alzheimer's Project" },
   { id: 'wandering', title: 'Wandering', desc: 'Why wandering happens and how to keep a loved one safe', source: 'UCLA Health', href: 'https://www.youtube.com/watch?v=Sw0yEB508mI' },
   { title: 'Strategies for Family Dynamics', source: "Alzheimer's Project" },
-  { title: 'Kitchen Safety', source: "Alzheimer's Project" },
+  { title: 'Kitchen Safety', source: 'UCLA Health', href: 'https://www.youtube.com/watch?v=_LneALBpMfE' },
   {
     title: 'Fire Safety',
     desc: 'Reducing fire, cooking, and carbon monoxide risks at home',
@@ -23,10 +23,7 @@ const videos: Video[] = [
     note: "This video comes from Cornwall Fire & Rescue Service in the United Kingdom. Its safety advice is accurate and useful, but the phone numbers and services it mentions do not serve Florida, so please don't contact them. Local families can request a free home fire safety survey from the Tallahassee Fire Department instead.",
     action: { label: 'Find local home safety resources', href: '/caregiver-support/home-safety' },
   },
-  { title: 'Home Safety', source: "Alzheimer's Project" },
-  { title: 'Challenges with Sleep', source: "Alzheimer's Project" },
   { title: 'Noise and Distractions', desc: 'Creating a calmer environment at home', source: "Alzheimer's Project", href: 'https://www.youtube.com/watch?v=PcycMLaksIY&t=66s' },
-  { title: 'Financial & Legal Conversations', source: "Alzheimer's Project" },
   { title: 'Financial Considerations', desc: 'Managing and protecting finances as dementia progresses', source: 'McGill University', href: 'https://www.youtube.com/watch?v=8mJ9IC1PXR0' },
   { title: 'Legal Considerations', desc: 'Legal steps to take after a dementia diagnosis', source: 'Wyoming Dementia Together', href: 'https://www.youtube.com/watch?v=c_N4X7EHh-8' },
   { title: 'Falls', desc: 'Simple ways to prevent falls at home', source: 'Keila Haynes (YouTube)', href: 'https://www.youtube.com/watch?v=AYTqp96LMCg' },
@@ -41,8 +38,6 @@ const videos: Video[] = [
     ],
   },
   { title: 'Repeat Questions & Statements', desc: 'Techniques for responding calmly without frustration', source: 'UCLA Health', href: 'https://www.youtube.com/watch?v=hke8ek_aHkE' },
-  { title: 'Wandering Prevention', desc: 'Environmental and behavioral strategies to reduce wandering risk', source: 'UCLA Health' },
-  { title: 'Aggression & Agitation', desc: 'De-escalation approaches and identifying triggers', source: 'UCLA Health' },
   { title: 'Nighttime Disturbances', desc: 'Sleep hygiene and overnight care strategies', source: 'UCLA Health', href: 'https://www.youtube.com/watch?v=skgL6XzLqG8' },
 ]
 
@@ -60,7 +55,7 @@ export default function VideosPage() {
       </p>
 
       <section className="mb-10" aria-label="Videos">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
           {videos.map((video) => (
             <VideoCard key={video.title} video={video} />
           ))}
