@@ -7,6 +7,7 @@ const sidebarLinks = [
   { label: 'Support Groups', href: '/caregiver-support/support-groups' },
   { label: 'Classes & Education', href: '/caregiver-support/classes' },
   { label: 'Video Library', href: '/caregiver-support/videos' },
+  { label: 'Home Safety', href: '/caregiver-support/home-safety' },
   { label: 'Online Communities', href: '/caregiver-support/online' },
   { label: 'Taking Care of Yourself', href: '/caregiver-support/self-care' },
   { label: 'Talking to Your Doctor', href: '/caregiver-support/talking-to-your-doctor' },

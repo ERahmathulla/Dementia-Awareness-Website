@@ -7,7 +7,6 @@ const sidebarLinks = [
   { label: 'Respite & Adult Day', href: '/care-services/respite' },
   { label: 'In-Home Services', href: '/care-services/in-home' },
   { label: 'Long-Term Care Options', href: '/care-services/long-term-care' },
-  { label: 'Home Safety', href: '/care-services/home-safety' },
   { label: 'Wandering & Missing Persons', href: '/care-services/wandering' },
   { label: 'Transportation & Driving', href: '/care-services/transportation' },
 ]
@@ -19,7 +18,7 @@ export default function CareServicesLayout({ children }: { children: React.React
         icon={Home}
         label="Care Services"
         title="Find Care & Services"
-        description="Respite, in-home help, long-term care, home safety, and transportation resources."
+        description="Respite, in-home help, long-term care, and transportation resources."
         gradient="bg-gradient-to-b from-warmgray-50/70 to-white"
         iconColor="text-warmgray-700"
       />

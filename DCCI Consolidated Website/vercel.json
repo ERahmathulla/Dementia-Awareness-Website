@@ -1,3 +1,6 @@
 {
-  "outputDirectory": "out"
+  "outputDirectory": "out",
+  "redirects": [
+    { "source": "/care-services/home-safety", "destination": "/caregiver-support/home-safety", "permanent": true }
+  ]
 }

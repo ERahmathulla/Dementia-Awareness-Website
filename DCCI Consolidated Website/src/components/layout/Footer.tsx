@@ -162,6 +162,8 @@ export default function Footer() {
                 IconScout
               </a>
             </span>
+            <span className="hidden sm:inline text-warmgray-800" aria-hidden>·</span>
+            <span>Website created by Emaad Rahmathulla</span>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/about#accessibility" className="hover:text-warmgray-400 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-warmgray-700 rounded">

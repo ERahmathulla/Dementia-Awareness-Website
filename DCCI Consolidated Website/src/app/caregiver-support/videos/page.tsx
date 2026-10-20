@@ -1,34 +1,45 @@
 ﻿import type { Metadata } from 'next'
-import { ExternalLink, Play } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
+import VideoCard, { type Video } from '@/components/ui/VideoCard'
 
 export const metadata: Metadata = {
   title: 'Caregiver Video Library',
   description: 'Free on-demand how-to videos covering common dementia caregiving challenges including behaviors, safety, communication, and more.',
 }
 
-const apVideos = [
-  'Agitation & Aggression',
-  "Let's Talk Action Plans",
-  'What is Safe Sitting?',
-  'Wandering',
-  'Strategies for Family Dynamics',
-  'Kitchen Safety',
-  'Fire Safety',
-  'Home Safety',
-  'Challenges with Sleep',
-  'Noise & Distractions',
-  'Financial & Legal Conversations',
-  'Falls',
-  'Dressing',
-]
-
-const uclaSections = [
-  { title: 'Refusing Care', desc: 'What to do when a loved one refuses bathing, medications, or meals' },
-  { title: 'Repeat Questions & Statements', desc: 'Techniques for responding calmly without frustration' },
-  { title: 'Wandering Prevention', desc: 'Environmental and behavioral strategies to reduce wandering risk' },
-  { title: 'Aggression & Agitation', desc: 'De-escalation approaches and identifying triggers' },
-  { title: 'Nighttime Disturbances', desc: 'Sleep hygiene and overnight care strategies' },
+const videos: Video[] = [
+  { title: 'Agitation & Aggression', desc: 'Spotting triggers and calming tense moments', source: 'UCLA Health', href: 'https://www.youtube.com/watch?v=hahvUXwTXE4' },
+  { title: "Let's Talk Action Plans", source: "Alzheimer's Project" },
+  { title: 'What is Safe Sitting?', source: "Alzheimer's Project" },
+  { id: 'wandering', title: 'Wandering', desc: 'Why wandering happens and how to keep a loved one safe', source: 'UCLA Health', href: 'https://www.youtube.com/watch?v=Sw0yEB508mI' },
+  { title: 'Strategies for Family Dynamics', source: "Alzheimer's Project" },
+  { title: 'Kitchen Safety', source: 'UCLA Health', href: 'https://www.youtube.com/watch?v=_LneALBpMfE' },
+  {
+    title: 'Fire Safety',
+    desc: 'Reducing fire, cooking, and carbon monoxide risks at home',
+    source: 'DISCOVER Voices / Cornwall Fire & Rescue (UK)',
+    href: 'https://www.youtube.com/watch?v=3ohpZNC65FM',
+    noteLabel: 'Note: this is a UK video. Read before calling any numbers.',
+    note: "This video comes from Cornwall Fire & Rescue Service in the United Kingdom. Its safety advice is accurate and useful, but the phone numbers and services it mentions do not serve Florida, so please don't contact them. Local families can request a free home fire safety survey from the Tallahassee Fire Department instead.",
+    action: { label: 'Find local home safety resources', href: '/caregiver-support/home-safety' },
+  },
+  { title: 'Noise and Distractions', desc: 'Creating a calmer environment at home', source: "Alzheimer's Project", href: 'https://www.youtube.com/watch?v=PcycMLaksIY&t=66s' },
+  { title: 'Financial Considerations', desc: 'Managing and protecting finances as dementia progresses', source: 'McGill University', href: 'https://www.youtube.com/watch?v=8mJ9IC1PXR0' },
+  { title: 'Legal Considerations', desc: 'Legal steps to take after a dementia diagnosis', source: 'Wyoming Dementia Together', href: 'https://www.youtube.com/watch?v=c_N4X7EHh-8' },
+  { title: 'Falls', desc: 'Simple ways to prevent falls at home', source: 'Keila Haynes (YouTube)', href: 'https://www.youtube.com/watch?v=AYTqp96LMCg' },
+  { title: 'Dressing', desc: 'Helping a loved one get dressed with less stress', source: "Teepa Snow's Positive Approach to Care", href: 'https://www.youtube.com/watch?v=B0YomKXSDaw' },
+  {
+    title: 'Refusing Care',
+    desc: 'What to do when a loved one refuses bathing, medications, or meals',
+    source: 'UCLA Health',
+    links: [
+      { label: 'Bathing', href: 'https://www.youtube.com/watch?v=sl3Dc1kERto' },
+      { label: 'Medications', href: 'https://www.youtube.com/watch?v=-rB5-AkqpjQ' },
+    ],
+  },
+  { title: 'Repeat Questions & Statements', desc: 'Techniques for responding calmly without frustration', source: 'UCLA Health', href: 'https://www.youtube.com/watch?v=hke8ek_aHkE' },
+  { title: 'Nighttime Disturbances', desc: 'Sleep hygiene and overnight care strategies', source: 'UCLA Health', href: 'https://www.youtube.com/watch?v=skgL6XzLqG8' },
 ]
 
 export default function VideosPage() {
@@ -44,61 +55,20 @@ export default function VideosPage() {
         Free on-demand videos covering the most common caregiving challenges. Watch at your own pace, as many times as you need.
       </p>
 
-      {/* Alzheimer's Project library */}
-      <section className="mb-10" aria-labelledby="ap-videos-heading">
-        <div className="flex items-center justify-between mb-4 gap-3">
-          <h2 id="ap-videos-heading" className="text-xl font-bold text-warmgray-900">
-            Alzheimer's Project Video Library
-          </h2>
+      <section className="mb-10" aria-label="Videos">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
+          {videos.map((video) => (
+            <VideoCard key={video.title} video={video} />
+          ))}
+        </div>
+        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
           <a href="https://alzheimersproject.org" target="_blank" rel="noopener noreferrer"
-            className="text-sm font-medium text-warmgray-800 hover:text-warmgray-900 transition-colors flex items-center gap-1 shrink-0">
-            Visit site <ExternalLink className="w-3.5 h-3.5" aria-hidden />
+            className="text-sm font-medium text-warmgray-800 hover:text-warmgray-900 transition-colors flex items-center gap-1">
+            Alzheimer's Project video library <ExternalLink className="w-3.5 h-3.5" aria-hidden />
           </a>
-        </div>
-        <p className="text-sm text-warmgray-500 mb-4">
-          Practical how-to videos on the most common caregiving challenges, produced locally. Also includes "Sandy's Story" (Dr. Sanjay Gupta's short film on Alzheimer's and end-of-life wishes) and past conference recordings.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-          {apVideos.map((title) => (
-            <div key={title}
-              className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-white border border-warmgray-100 shadow-card">
-              <div className="w-7 h-7 rounded-lg bg-warmgray-100 flex items-center justify-center shrink-0">
-                <Play className="w-3.5 h-3.5 text-warmgray-800 fill-warmgray-800" aria-hidden />
-              </div>
-              <span className="text-sm font-medium text-warmgray-800">{title}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* UCLA library */}
-      <section className="mb-10" aria-labelledby="ucla-videos-heading">
-        <div className="flex items-center justify-between mb-4 gap-3">
-          <h2 id="ucla-videos-heading" className="text-xl font-bold text-warmgray-900">
-            UCLA Alzheimer's & Dementia Care — Caregiver Videos
-          </h2>
-          <span className="badge bg-warmgray-100 text-warmgray-800 shrink-0">En Español</span>
-        </div>
-        <p className="text-sm text-warmgray-500 mb-4">
-          Free training videos on challenging behaviors from UCLA's program. <strong>Available in both English and Spanish.</strong> Linked through FSU REACH.
-        </p>
-        <div className="space-y-3">
-          {uclaSections.map((item) => (
-            <div key={item.title} className="flex gap-3 p-4 rounded-xl bg-white border border-warmgray-100 shadow-card">
-              <div className="w-8 h-8 rounded-lg bg-warmgray-100 flex items-center justify-center shrink-0">
-                <Play className="w-4 h-4 text-warmgray-700 fill-warmgray-700" aria-hidden />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-warmgray-900">{item.title}</p>
-                <p className="text-xs text-warmgray-500 mt-0.5">{item.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4">
           <a href="https://reach.med.fsu.edu" target="_blank" rel="noopener noreferrer"
             className="text-sm font-medium text-warmgray-800 hover:text-warmgray-900 transition-colors flex items-center gap-1">
-            Access UCLA videos through FSU REACH <ExternalLink className="w-3.5 h-3.5" aria-hidden />
+            UCLA videos in English & Spanish through FSU REACH <ExternalLink className="w-3.5 h-3.5" aria-hidden />
           </a>
         </div>
       </section>
