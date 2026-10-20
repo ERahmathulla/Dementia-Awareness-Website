@@ -31,6 +31,7 @@ export const NAV_LINKS = [
       { label: 'Support Groups', href: '/caregiver-support/support-groups', description: 'Free local groups, times, and locations' },
       { label: 'Classes & Education', href: '/caregiver-support/classes', description: 'Powerful Tools for Caregivers and more' },
       { label: 'Video Library', href: '/caregiver-support/videos', description: 'On-demand how-to videos for common challenges' },
+      { label: 'Home Safety', href: '/caregiver-support/home-safety', description: 'Fire safety, smoke alarms, and wandering help' },
       { label: 'Online Communities', href: '/caregiver-support/online', description: 'ALZConnected, Family Caregiver Alliance, and more' },
       { label: 'Taking Care of Yourself', href: '/caregiver-support/self-care', description: 'Burnout prevention and caregiver wellness' },
       { label: 'Talking to Your Doctor', href: '/caregiver-support/talking-to-your-doctor', description: 'How to communicate with the care team' },

@@ -1,6 +1,6 @@
 ﻿import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Users, BookOpen, Video, Globe, Heart, MessageCircle, Phone } from 'lucide-react'
+import { ArrowRight, Users, BookOpen, Video, Shield, Globe, Heart, MessageCircle, Phone } from 'lucide-react'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
 
 export const metadata: Metadata = {
@@ -28,6 +28,13 @@ const subPages = [
     href: '/caregiver-support/videos',
     title: 'Video Library',
     description: 'On-demand how-to videos: agitation, wandering, sleep, dressing, family dynamics, and more.',
+    accent: 'bg-warmgray-100 text-warmgray-800',
+  },
+  {
+    icon: Shield,
+    href: '/caregiver-support/home-safety',
+    title: 'Home Safety',
+    description: 'Free local fire safety services, kitchen safety tips, and help with wandering.',
     accent: 'bg-warmgray-100 text-warmgray-800',
   },
   {
