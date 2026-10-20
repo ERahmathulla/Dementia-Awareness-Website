@@ -1,6 +1,6 @@
 ﻿import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Home, Calendar, Building2, Shield, Navigation, Car, Phone } from 'lucide-react'
+import { ArrowRight, Home, Calendar, Building2, Navigation, Car, Phone } from 'lucide-react'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
 
 export const metadata: Metadata = {
@@ -15,8 +15,6 @@ const subPages = [
     description: 'CCE, Home Care for the Elderly (HCE), ADI in-home services, OAA meals — how the Elder Helpline intake works.', accent: 'bg-warmgray-100 text-warmgray-800' },
   { icon: Building2, href: '/care-services/long-term-care', title: 'Long-Term Care Options',
     description: 'SMMC-LTC Medicaid managed long-term care, PACE, CARES assessment, ADRC navigation.', accent: 'bg-warmgray-100 text-warmgray-800' },
-  { icon: Shield, href: '/care-services/home-safety', title: 'Home Safety & Daily Care',
-    description: 'Falls prevention, fire safety, kitchen safety, sleep challenges, wandering, and the "safe sitting" technique.', accent: 'bg-warmgray-100 text-warmgray-800' },
   { icon: Navigation, href: '/care-services/wandering', title: 'Wandering & Missing Persons',
     description: 'Silver Alert registration, Scent Evidence K9 scent kits, and what to do if your loved one wanders.', accent: 'bg-emergency-100 text-emergency-600' },
   { icon: Car, href: '/care-services/transportation', title: 'Transportation & Driving',

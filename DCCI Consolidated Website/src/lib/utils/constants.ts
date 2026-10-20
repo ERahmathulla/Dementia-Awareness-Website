@@ -46,7 +46,6 @@ export const NAV_LINKS = [
       { label: 'Respite & Adult Day', href: '/care-services/respite', description: 'Social Clubs, in-home respite, and day programs' },
       { label: 'In-Home Services', href: '/care-services/in-home', description: 'CCE, HCE, ADI, and meal programs' },
       { label: 'Long-Term Care Options', href: '/care-services/long-term-care', description: 'PACE, SMMC-LTC, and facility care' },
-      { label: 'Home Safety', href: '/care-services/home-safety', description: 'Falls, fire safety, kitchen safety, and wandering' },
       { label: 'Wandering & Missing Persons', href: '/care-services/wandering', description: 'Silver Alert, Scent Evidence K9, and prevention' },
       { label: 'Transportation & Driving', href: '/care-services/transportation', description: 'Senior transport, driving cessation guidance' },
     ],

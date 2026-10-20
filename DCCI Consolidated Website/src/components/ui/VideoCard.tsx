@@ -9,6 +9,7 @@ export type Video = {
   href?: string
   links?: { label: string; href: string }[]
   note?: string
+  noteLabel?: string
   action?: { label: string; href: string }
 }
 
@@ -52,18 +53,23 @@ export default function VideoCard({ video }: { video: Video }) {
       )}
 
       {(video.note || video.action) && (
-        <div className="px-4 pb-4 space-y-3">
-          {video.note && (
-            <p className="text-xs text-warmgray-600 leading-relaxed p-3 rounded-lg bg-warmgray-50 border border-warmgray-200">
-              {video.note}
-            </p>
-          )}
-          {video.action && (
-            <Link href={video.action.href} className="btn-secondary text-sm w-full">
-              {video.action.label}
-            </Link>
-          )}
-        </div>
+        <details className="px-4 pb-4 pl-[60px] -mt-2">
+          <summary className="text-xs font-medium text-warmgray-600 hover:text-warmgray-900 cursor-pointer transition-colors">
+            {video.noteLabel}
+          </summary>
+          <div className="mt-3 space-y-3">
+            {video.note && (
+              <p className="text-xs text-warmgray-600 leading-relaxed p-3 rounded-lg bg-warmgray-50 border border-warmgray-200">
+                {video.note}
+              </p>
+            )}
+            {video.action && (
+              <Link href={video.action.href} className="btn-secondary text-sm w-full">
+                {video.action.label}
+              </Link>
+            )}
+          </div>
+        </details>
       )}
     </div>
   )

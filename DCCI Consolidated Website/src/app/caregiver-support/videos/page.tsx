@@ -20,6 +20,7 @@ const videos: Video[] = [
     desc: 'Reducing fire, cooking, and carbon monoxide risks at home',
     source: 'DISCOVER Voices / Cornwall Fire & Rescue (UK)',
     href: 'https://www.youtube.com/watch?v=3ohpZNC65FM',
+    noteLabel: 'Note: this is a UK video. Read before calling any numbers.',
     note: "This video comes from Cornwall Fire & Rescue Service in the United Kingdom. Its safety advice is accurate and useful, but the phone numbers and services it mentions do not serve Florida, so please don't contact them. Local families can request a free home fire safety survey from the Tallahassee Fire Department instead.",
     action: { label: 'Find local home safety resources', href: '/caregiver-support/home-safety' },
   },
