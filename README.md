@@ -27,6 +27,10 @@ Alzheimer's Project · TMH Memory Disorder Clinic · FSU REACH · Advantage Agin
 
 The app lives in the `DCCI Consolidated Website/` subfolder. The repo root holds only this README and the license.
 
+## Editing content
+
+The Resource Directory and events are stored in [Sanity](https://www.sanity.io) and edited at https://dementia-awareness.vercel.app/studio. No code changes are needed. See the [editor guide](DCCI%20Consolidated%20Website/docs/EDITING.md) for step-by-step instructions.
+
 ## Running the site locally
 
 Requires [Node.js](https://nodejs.org).
