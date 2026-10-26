@@ -63,9 +63,9 @@ export const NAV_LINKS = [
     ],
   },
   {
-    label: 'Resource Directory',
+    label: 'Search Resources',
     href: '/directory',
-    description: 'All local organizations searchable by need, county, and language',
+    description: 'Search every page on the site',
     color: 'warmgray',
   },
 ] as const

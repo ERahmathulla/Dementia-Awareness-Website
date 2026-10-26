@@ -1,16 +1,23 @@
 ﻿'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Search, X, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import { useSearchStore } from '@/store/searchStore'
+import { useSiteSearch } from '@/lib/hooks/useSiteSearch'
+import SearchResults from './SearchResults'
 
 export default function SearchOverlay() {
   const { isOpen, close, query, setQuery } = useSearchStore()
   const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
+  const { status, results, total } = useSiteSearch(isOpen ? query : '', 5)
+  const fullSearchHref = query.trim() ? `/directory?q=${encodeURIComponent(query.trim())}` : '/directory'
+  // Keep showing the previous results while the next search runs
+  const showResults = Boolean(query.trim()) && status !== 'idle' && (status !== 'loading' || results.length > 0)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -27,7 +34,7 @@ export default function SearchOverlay() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (query.trim()) {
-      router.push(`/directory?q=${encodeURIComponent(query.trim())}`)
+      router.push(fullSearchHref)
       close()
     }
   }
@@ -68,26 +75,38 @@ export default function SearchOverlay() {
               <kbd className="hidden sm:flex items-center px-1.5 py-0.5 text-xs text-warmgray-500 border border-warmgray-200 rounded">Esc</kbd>
             </div>
 
-            <div className="px-4 py-6 text-center">
-              <Search className="w-8 h-8 text-warmgray-200 mx-auto mb-3" aria-hidden />
-              <p className="text-sm text-warmgray-500 mb-1">
-                {query ? `Search the directory for "${query}"` : 'Type to search resources, support groups, and organizations.'}
-              </p>
-              <p className="text-xs text-warmgray-400 mb-4">Search runs in the Resource Directory.</p>
-              <button type="submit" disabled={!query.trim()}
-                className="btn-primary text-sm disabled:opacity-40">
-                Search in Directory <ArrowRight className="w-4 h-4" aria-hidden />
-              </button>
-            </div>
+            {showResults ? (
+              <div className="max-h-[60vh] overflow-y-auto" aria-live="polite">
+                {results.length > 0 ? (
+                  <SearchResults status={status} results={results} onSelect={close} compact />
+                ) : (
+                  <div className="px-4 py-6"><SearchResults status={status} results={results} /></div>
+                )}
+                {total > results.length && (
+                  <div className="px-4 py-3 border-t border-warmgray-100">
+                    <button type="submit" className="flex items-center gap-1.5 text-sm font-medium text-warmgray-800 hover:text-warmgray-900 transition-colors">
+                      See all {total} results <ArrowRight className="w-4 h-4" aria-hidden />
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="px-4 py-6 text-center">
+                <Search className="w-8 h-8 text-warmgray-200 mx-auto mb-3" aria-hidden />
+                <p className="text-sm text-warmgray-500">
+                  {query.trim() ? 'Searching…' : 'Type to search every page on the site.'}
+                </p>
+              </div>
+            )}
           </form>
 
           <div className="px-4 py-2.5 border-t border-warmgray-100 flex items-center justify-between text-xs text-warmgray-400">
             <span className="flex items-center gap-1">
-              <kbd className="text-xs border border-warmgray-200 rounded px-1 py-0.5">↵</kbd> search
+              <kbd className="text-xs border border-warmgray-200 rounded px-1 py-0.5">↵</kbd> all results
             </span>
-            <a href="/directory" className="text-warmgray-800 hover:text-warmgray-900 transition-colors" onClick={close}>
-              Browse all resources →
-            </a>
+            <Link href={fullSearchHref} className="text-warmgray-800 hover:text-warmgray-900 transition-colors" onClick={close}>
+              Open Search Resources →
+            </Link>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

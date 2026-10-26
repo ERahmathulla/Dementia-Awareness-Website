@@ -53,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <MobileNav />
 
-          <main id="main-content" className="flex-1" tabIndex={-1}>
+          <main id="main-content" className="flex-1" tabIndex={-1} data-pagefind-body>
             <PageTransition>
               {children}
             </PageTransition>

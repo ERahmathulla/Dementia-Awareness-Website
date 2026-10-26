@@ -20,7 +20,7 @@ const footerLinks = {
     { label: 'Emergency Resources', href: '/emergency' },
   ],
   'Find Resources': [
-    { label: 'Resource Directory', href: '/directory' },
+    { label: 'Search Resources', href: '/directory' },
     { label: 'Events & Classes', href: '/events' },
     { label: 'For Professionals', href: '/professionals' },
     { label: 'Downloadable Guides', href: '/directory#downloads' },

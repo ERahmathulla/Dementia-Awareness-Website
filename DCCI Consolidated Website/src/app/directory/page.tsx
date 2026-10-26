@@ -1,21 +1,11 @@
 import type { Metadata } from 'next'
-import DirectoryClient from './DirectoryClient'
-import { getDirectory } from '@/sanity/lib/queries'
+import SearchClient from './SearchClient'
 
 export const metadata: Metadata = {
-  title: 'Resource Directory',
-  description: 'Search and filter all dementia caregiving resources in the Big Bend region by category, county, and language.',
+  title: 'Search Resources',
+  description: 'Search every page of Big Bend Brain Health for dementia caregiving resources, services, and support in the Big Bend region.',
 }
 
-export const revalidate = 60
-
-export default async function DirectoryPage() {
-  const data = await getDirectory()
-  return (
-    <DirectoryClient
-      listings={data?.listings ?? []}
-      categories={data?.categories ?? []}
-      loadError={!data}
-    />
-  )
+export default function SearchPage() {
+  return <SearchClient />
 }

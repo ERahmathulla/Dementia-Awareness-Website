@@ -157,7 +157,7 @@ export default async function CountyPage({ params }: Props) {
             </a>
 
             <Link
-              href={`/directory?county=${county.slug}`}
+              href="/directory"
               className="flex items-center gap-3 p-5 rounded-2xl bg-white border border-warmgray-100 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warmgray-700 focus-visible:ring-offset-2"
             >
               <div className="w-10 h-10 rounded-xl bg-warmgray-100 flex items-center justify-center shrink-0">
@@ -167,7 +167,7 @@ export default async function CountyPage({ params }: Props) {
                 <p className="text-xs font-semibold text-warmgray-500 uppercase tracking-wide mb-0.5">
                   Browse now
                 </p>
-                <p className="text-sm font-bold text-warmgray-900">Resource directory</p>
+                <p className="text-sm font-bold text-warmgray-900">Search Resources</p>
               </div>
             </Link>
           </div>

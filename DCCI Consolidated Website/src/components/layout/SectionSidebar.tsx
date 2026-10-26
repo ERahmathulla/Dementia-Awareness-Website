@@ -19,6 +19,7 @@ export default function SectionSidebar({ title, links }: SectionSidebarProps) {
 
   return (
     <aside
+      data-pagefind-ignore
       className="hidden lg:block w-56 shrink-0"
       aria-label={`${title} section navigation`}
     >

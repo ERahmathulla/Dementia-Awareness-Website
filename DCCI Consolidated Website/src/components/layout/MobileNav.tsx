@@ -164,7 +164,7 @@ export default function MobileNav() {
                   About
                 </Link>
                 <Link href="/directory" className="flex items-center justify-center px-3 py-2 text-xs font-medium text-warmgray-600 bg-warmgray-100 rounded-lg hover:bg-warmgray-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warmgray-700">
-                  Directory
+                  Search
                 </Link>
               </div>
             </div>

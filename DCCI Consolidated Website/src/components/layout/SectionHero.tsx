@@ -19,7 +19,7 @@ export default function SectionHero({
   iconColor,
 }: SectionHeroProps) {
   return (
-    <div className={cn('border-b border-warmgray-100 py-12 md:py-16', gradient)}>
+    <div className={cn('border-b border-warmgray-100 py-12 md:py-16', gradient)} data-pagefind-ignore>
       <div className="container-main">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-4 bg-white/60 backdrop-blur-sm border border-white/80">
           <Icon className={cn('w-3.5 h-3.5', iconColor)} aria-hidden />
