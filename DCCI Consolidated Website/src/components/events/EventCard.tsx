@@ -1,34 +1,19 @@
 import { MapPin, Clock, ExternalLink } from 'lucide-react'
 import type { SiteEvent } from '@/sanity/lib/queries'
-import { LOCAL_COUNTIES } from '@/sanity/options'
-
-const TIME_ZONE = 'America/New_York'
-
-function fmt(iso: string, options: Intl.DateTimeFormatOptions) {
-  return new Date(iso).toLocaleString('en-US', { timeZone: TIME_ZONE, ...options })
-}
-
-function whenText(start: string, end?: string) {
-  const day = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' } as const
-  const time = { hour: 'numeric', minute: '2-digit' } as const
-  const startText = `${fmt(start, day)} · ${fmt(start, time)}`
-  if (!end) return startText
-  const sameDay = fmt(start, { dateStyle: 'short' }) === fmt(end, { dateStyle: 'short' })
-  return sameDay ? `${startText}–${fmt(end, time)}` : `${startText} – ${fmt(end, day)} · ${fmt(end, time)}`
-}
+import { countyLabel, formatEventDay, formatEventWhen } from '@/lib/utils/schedule'
 
 export default function EventCard({ event }: { event: SiteEvent }) {
   const place = [event.locationName, event.address].filter(Boolean).join(', ')
-  const countyLabel = (LOCAL_COUNTIES as readonly string[]).includes(event.county) ? `${event.county} County` : event.county
+  const county = countyLabel(event.county)
 
   return (
-    <div className="card-base p-5 flex gap-4">
+    <div id={`event-${event._id}`} className="card-base p-5 flex gap-4 scroll-mt-header">
       <div className="flex flex-col items-center justify-center w-14 h-14 bg-warmgray-100 rounded-xl shrink-0 text-center">
         <span className="text-xs font-bold text-warmgray-800 uppercase leading-none">
-          {fmt(event.start, { month: 'short' })}
+          {formatEventDay(event.start, { month: 'short' })}
         </span>
         <span className="text-xl font-bold text-warmgray-900 leading-tight">
-          {fmt(event.start, { day: 'numeric' })}
+          {formatEventDay(event.start, { day: 'numeric' })}
         </span>
       </div>
       <div className="flex-1 min-w-0">
@@ -36,11 +21,11 @@ export default function EventCard({ event }: { event: SiteEvent }) {
         <div className="space-y-1 text-sm text-warmgray-500">
           <div className="flex items-start gap-1.5">
             <Clock className="w-3.5 h-3.5 shrink-0 mt-0.5" aria-hidden />
-            <span>{whenText(event.start, event.end)}</span>
+            <span>{formatEventWhen(event.start, event.end)}</span>
           </div>
           <div className="flex items-start gap-1.5">
             <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" aria-hidden />
-            <span>{place ? `${place} (${countyLabel})` : countyLabel}</span>
+            <span>{place ? `${place} (${county})` : county}</span>
           </div>
         </div>
         {event.description && (

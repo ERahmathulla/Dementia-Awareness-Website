@@ -4,6 +4,7 @@ import { MapPin, Clock, Phone, Calendar, Users } from 'lucide-react'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
 import { getRecurringPrograms, type RecurringProgram, type ScheduleEntry } from '@/sanity/lib/queries'
 import { DAYS_OF_WEEK } from '@/sanity/options'
+import { formatTimeRange } from '@/lib/utils/schedule'
 
 export const metadata: Metadata = {
   title: 'Respite & Adult Day Programs',
@@ -12,13 +13,7 @@ export const metadata: Metadata = {
 
 export const revalidate = 60
 
-// "09:00" -> "9am", "13:30" -> "1:30pm"
-function shortTime(value: string) {
-  const [h, m] = value.split(':').map(Number)
-  return `${h % 12 || 12}${m ? `:${String(m).padStart(2, '0')}` : ''}${h < 12 ? 'am' : 'pm'}`
-}
-
-const timeRange = (entry: ScheduleEntry) => `${shortTime(entry.startTime)}–${shortTime(entry.endTime)}`
+const timeRange = (entry: ScheduleEntry) => formatTimeRange(entry.startTime, entry.endTime)
 
 function placeLabel(program: RecurringProgram) {
   const place = program.locationName ?? program.name
@@ -27,7 +22,7 @@ function placeLabel(program: RecurringProgram) {
 
 export default async function RespitePage() {
   // Respite schedules are managed in Sanity (Studio → Recurring programs → Respite)
-  const programs = await getRecurringPrograms('Respite')
+  const programs = await getRecurringPrograms({ programType: 'Respite' })
   const entries = (programs ?? []).flatMap((program) => (program.schedule ?? []).map((entry) => ({ program, entry })))
   const socialClubs = DAYS_OF_WEEK
     .map((day) => ({
@@ -60,9 +55,11 @@ export default async function RespitePage() {
         </h2>
         <p className="text-sm text-warmgray-500 mb-5">
           Structured day programs with CNA/HHA supervision and therapeutic activities — music, art, pet therapy, guided exercise, games, and intergenerational socialization.
-          {sharedRange && <> Open <strong>{sharedRange}</strong>{sharedNote && ` (${sharedNote})`}.</>}
+          {/* Sanity-driven text is left out of the site search index; live search covers it */}
+          {sharedRange && <span data-pagefind-ignore> Open <strong>{sharedRange}</strong>{sharedNote && ` (${sharedNote})`}.</span>}
         </p>
 
+        <div data-pagefind-ignore>
         {programs === null ? (
           <p className="text-sm text-warmgray-600 mb-6" role="alert">
             The Social Club schedule couldn't load right now. Call <a href="tel:+18503862778" className="font-semibold underline">(850) 386-2778</a> for current days and times.
@@ -100,6 +97,7 @@ export default async function RespitePage() {
             ))}
           </div>
         )}
+        </div>
 
         <div className="p-5 rounded-2xl bg-warmgray-50 border border-warmgray-200">
           <h3 className="text-sm font-bold text-warmgray-900 mb-2">How to get started</h3>

@@ -1,62 +1,21 @@
 ﻿import type { Metadata } from 'next'
 import { MapPin, Clock, Phone, Users } from 'lucide-react'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
+import { ProgramsLoadError } from '@/components/programs/ProgramCard'
+import { getRecurringPrograms } from '@/sanity/lib/queries'
+import { formatScheduleEntry } from '@/lib/utils/schedule'
 
 export const metadata: Metadata = {
   title: 'Local Support Groups',
   description: 'Free dementia caregiver support groups in the Big Bend area. No RSVP required.',
 }
 
-const groups = [
-  {
-    name: 'Mindful Moments (Early-Stage Group)',
-    location: "St. Paul's United Methodist Church",
-    address: 'Tallahassee, FL',
-    schedule: '2nd & 4th Thursday, 10–11:30am',
-    notes: 'For caregivers of persons in early-stage dementia',
-    type: 'Specialized',
-  },
-  {
-    name: 'Luncheon Support Group',
-    location: "St. Paul's UMC – Parlor Room",
-    address: 'Tallahassee, FL',
-    schedule: '1st & 3rd Tuesday, 11:30am–1pm',
-    notes: '',
-    type: 'General',
-  },
-  {
-    name: 'Evening Support Group',
-    location: 'Immanuel Baptist Church',
-    address: 'Tallahassee, FL',
-    schedule: '2nd & 4th Tuesday, 6–7:30pm',
-    notes: 'Evening scheduling for working caregivers',
-    type: 'General',
-  },
-  {
-    name: 'Morning Support Group',
-    location: 'Westminster Oaks – Bertrand Health Center',
-    address: 'Tallahassee, FL',
-    schedule: '2nd & 4th Friday, 10–11:30am',
-    notes: '',
-    type: 'General',
-  },
-  {
-    name: 'Jefferson County Support Group',
-    location: 'CowHaus Coffee Company',
-    address: 'Monticello, FL',
-    schedule: 'Last Monday of each month, 12–1pm',
-    notes: 'Serving Jefferson County and surrounding areas',
-    type: 'County',
-  },
-]
+export const revalidate = 60
 
-const typeColors: Record<string, string> = {
-  Specialized: 'bg-warmgray-100 text-warmgray-800',
-  General: 'bg-warmgray-100 text-warmgray-800',
-  County: 'bg-warmgray-100 text-warmgray-800',
-}
+export default async function SupportGroupsPage() {
+  // Support groups are managed in Sanity (Studio → Recurring programs → Support group)
+  const groups = await getRecurringPrograms({ programType: 'Support group' })
 
-export default function SupportGroupsPage() {
   return (
     <article>
       <Breadcrumbs crumbs={[
@@ -72,31 +31,50 @@ export default function SupportGroupsPage() {
         Dates and times subject to change. Call <a href="tel:+18503862778" className="text-warmgray-800 font-medium hover:text-warmgray-900 transition-colors">(850) 386-2778</a> to confirm or for questions.
       </p>
 
-      <div className="space-y-4 mb-10">
-        {groups.map((group) => (
-          <div key={group.name} className="p-5 rounded-2xl bg-white border border-warmgray-100 shadow-card">
-            <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
-              <h2 className="text-base font-bold text-warmgray-900">{group.name}</h2>
-              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${typeColors[group.type]}`}>
-                {group.type}
-              </span>
-            </div>
+      {/* Kept out of the static search index; live search covers Sanity content */}
+      <div className="space-y-4 mb-10" data-pagefind-ignore>
+        {groups === null ? (
+          <ProgramsLoadError />
+        ) : groups.length === 0 ? (
+          <p className="text-sm text-warmgray-600">
+            No support groups are listed right now. Call <a href="tel:+18503862778" className="font-semibold underline">(850) 386-2778</a> for the current schedule.
+          </p>
+        ) : (
+          groups.map((group) => (
+            <div key={group._id} id={group._id} className="p-5 rounded-2xl bg-white border border-warmgray-100 shadow-card scroll-mt-header">
+              <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
+                <h2 className="text-base font-bold text-warmgray-900">{group.name}</h2>
+                {group.label && (
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 bg-warmgray-100 text-warmgray-800">
+                    {group.label}
+                  </span>
+                )}
+              </div>
 
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2 text-sm text-warmgray-600">
-                <MapPin className="w-4 h-4 text-warmgray-400 shrink-0" aria-hidden />
-                <span><strong>{group.location}</strong> — {group.address}</span>
+              <div className="space-y-1.5">
+                {(group.locationName || group.address) && (
+                  <div className="flex items-center gap-2 text-sm text-warmgray-600">
+                    <MapPin className="w-4 h-4 text-warmgray-400 shrink-0" aria-hidden />
+                    <span>
+                      <strong>{group.locationName}</strong>
+                      {group.locationName && group.address && ' — '}
+                      {group.address}
+                    </span>
+                  </div>
+                )}
+                {group.schedule?.map((entry) => (
+                  <div key={entry._key} className="flex items-center gap-2 text-sm text-warmgray-600">
+                    <Clock className="w-4 h-4 text-warmgray-400 shrink-0" aria-hidden />
+                    <span>{formatScheduleEntry(entry)}</span>
+                  </div>
+                ))}
+                {group.publicNotes && (
+                  <p className="text-sm text-warmgray-500 pl-6">{group.publicNotes}</p>
+                )}
               </div>
-              <div className="flex items-center gap-2 text-sm text-warmgray-600">
-                <Clock className="w-4 h-4 text-warmgray-400 shrink-0" aria-hidden />
-                <span>{group.schedule}</span>
-              </div>
-              {group.notes && (
-                <p className="text-sm text-warmgray-500 pl-6">{group.notes}</p>
-              )}
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {/* Online options */}

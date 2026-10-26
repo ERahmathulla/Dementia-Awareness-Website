@@ -1,9 +1,8 @@
 ﻿import type { Metadata } from 'next'
-import Link from 'next/link'
-import { MapPin, Clock, Phone, Users } from 'lucide-react'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
 import EventCard, { EventsLoadError, NoUpcomingEvents } from '@/components/events/EventCard'
-import { getUpcomingEvents } from '@/sanity/lib/queries'
+import ProgramCard, { ProgramsLoadError, WeeklyPrograms } from '@/components/programs/ProgramCard'
+import { getRecurringPrograms, getUpcomingEvents } from '@/sanity/lib/queries'
 
 export const metadata: Metadata = {
   title: 'Events & Classes',
@@ -13,15 +12,10 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function EventsPage() {
-  const events = await getUpcomingEvents()
-
-  const recurringGroups = [
-    { name: 'Mindful Moments (Early-Stage)', schedule: '2nd & 4th Thursday, 10–11:30am', location: "St. Paul's UMC, Tallahassee" },
-    { name: 'Evening Support Group', schedule: '2nd & 4th Tuesday, 6–7:30pm', location: 'Immanuel Baptist Church, Tallahassee' },
-    { name: 'Luncheon Support Group', schedule: '1st & 3rd Tuesday, 11:30am–1pm', location: "St. Paul's UMC, Tallahassee" },
-    { name: 'Morning Support Group', schedule: '2nd & 4th Friday, 10–11:30am', location: 'Westminster Oaks, Tallahassee' },
-    { name: 'Jefferson Co. Support Group', schedule: 'Last Monday monthly, 12–1pm', location: 'CowHaus Coffee, Monticello' },
-  ]
+  const [events, programs] = await Promise.all([getUpcomingEvents(), getRecurringPrograms()])
+  // Support groups have their own section; the rest are listed under Weekly Programs
+  const supportGroups = programs?.filter((p) => p.programType === 'Support group') ?? []
+  const otherPrograms = programs?.filter((p) => p.programType !== 'Support group') ?? []
 
   return (
     <div className="pt-header">
@@ -36,7 +30,7 @@ export default async function EventsPage() {
       </div>
 
       <div className="container-main py-10">
-        {/* Recurring support groups */}
+        {/* Recurring support groups (Sanity; kept out of the static search index, live search covers it) */}
         <section className="mb-12" aria-labelledby="recurring-heading">
           <h2 id="recurring-heading" className="text-2xl font-bold text-warmgray-900 mb-2">
             Recurring Support Groups
@@ -45,47 +39,58 @@ export default async function EventsPage() {
             All groups are free, facilitated by Alzheimer's Project, and require no RSVP.
             Call <a href="tel:+18503862778" className="text-warmgray-800 font-medium hover:text-warmgray-900">(850) 386-2778</a> to confirm times.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {recurringGroups.map((group) => (
-              <div key={group.name} className="card-base p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-warmgray-100 flex items-center justify-center">
-                    <Users className="w-4 h-4 text-warmgray-700" aria-hidden />
-                  </div>
-                  <span className="badge bg-warmgray-100 text-warmgray-800">Recurring</span>
-                </div>
-                <h3 className="text-sm font-bold text-warmgray-900 mb-1.5">{group.name}</h3>
-                <div className="space-y-1 text-xs text-warmgray-500">
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="w-3 h-3 shrink-0" aria-hidden />
-                    {group.schedule}
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3 h-3 shrink-0" aria-hidden />
-                    {group.location}
-                  </div>
-                </div>
+          <div data-pagefind-ignore>
+            {programs === null ? (
+              <ProgramsLoadError />
+            ) : supportGroups.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {supportGroups.map((program) => (
+                  <ProgramCard key={program._id} program={program} />
+                ))}
               </div>
-            ))}
+            ) : (
+              <p className="text-sm text-warmgray-600">No support groups are listed right now.</p>
+            )}
           </div>
         </section>
 
         {/* Upcoming events from Sanity */}
-        <section aria-labelledby="upcoming-heading">
+        <section className="mb-12" aria-labelledby="upcoming-heading">
           <h2 id="upcoming-heading" className="text-2xl font-bold text-warmgray-900 mb-6">
             Upcoming Events
           </h2>
-          {events === null ? (
-            <EventsLoadError />
-          ) : events.length > 0 ? (
-            <div className="space-y-4">
-              {events.map((event) => (
-                <EventCard key={event._id} event={event} />
-              ))}
-            </div>
-          ) : (
-            <NoUpcomingEvents />
-          )}
+          <div data-pagefind-ignore>
+            {events === null ? (
+              <EventsLoadError />
+            ) : events.length > 0 ? (
+              <div className="space-y-4">
+                {events.map((event) => (
+                  <EventCard key={event._id} event={event} />
+                ))}
+              </div>
+            ) : (
+              <NoUpcomingEvents />
+            )}
+          </div>
+        </section>
+
+        {/* Other weekly programs from Sanity, grouped by type */}
+        <section id="weekly-programs" className="scroll-mt-header" aria-labelledby="weekly-programs-heading">
+          <h2 id="weekly-programs-heading" className="text-2xl font-bold text-warmgray-900 mb-2">
+            Weekly Programs
+          </h2>
+          <p className="text-sm text-warmgray-500 mb-6">
+            Programs that meet on the same days every week or month. Support groups are listed above.
+          </p>
+          <div data-pagefind-ignore>
+            {programs === null ? (
+              <ProgramsLoadError />
+            ) : otherPrograms.length > 0 ? (
+              <WeeklyPrograms programs={otherPrograms} />
+            ) : (
+              <p className="text-sm text-warmgray-600">No other weekly programs are listed right now.</p>
+            )}
+          </div>
         </section>
       </div>
     </div>

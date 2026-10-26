@@ -68,8 +68,14 @@ export const recurringProgram = defineType({
       title: 'Program type',
       type: 'string',
       options: { list: [...PROGRAM_TYPES], layout: 'radio' },
-      description: 'Respite programs appear on the Respite & Adult Day page.',
+      description: 'Respite programs appear on the Respite & Adult Day page, and support groups on the Support Groups page. All types appear on the Events page and county pages.',
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'label',
+      title: 'Label',
+      type: 'string',
+      description: 'Optional short tag shown as a badge on the Support Groups page, e.g. "General", "Specialized", or "County".',
     }),
     defineField({
       name: 'organization',

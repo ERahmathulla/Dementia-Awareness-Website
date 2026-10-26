@@ -5,7 +5,8 @@ import { ArrowLeft, Phone, Calendar, MapPin, ChevronRight } from 'lucide-react'
 import { OUTREACH_COUNTIES } from '@/lib/data/counties'
 import { HELPLINE_PHONE } from '@/lib/utils/constants'
 import EventCard, { EventsLoadError, NoUpcomingEvents } from '@/components/events/EventCard'
-import { getUpcomingEvents } from '@/sanity/lib/queries'
+import { ProgramsLoadError, WeeklyPrograms } from '@/components/programs/ProgramCard'
+import { getRecurringPrograms, getUpcomingEvents } from '@/sanity/lib/queries'
 
 interface Props {
   params: Promise<{ county: string }>
@@ -33,7 +34,10 @@ export default async function CountyPage({ params }: Props) {
 
   if (!county) notFound()
 
-  const events = await getUpcomingEvents(county.name)
+  const [events, programs] = await Promise.all([
+    getUpcomingEvents(county.name),
+    getRecurringPrograms({ county: county.name }),
+  ])
 
   return (
     <>
@@ -95,23 +99,41 @@ export default async function CountyPage({ params }: Props) {
             <h2 id="county-events-heading" className="text-2xl font-bold text-warmgray-900 mb-5">
               Upcoming events in {county.name} County
             </h2>
-            {events && events.length > 0 ? (
-              <div className="space-y-4">
-                {events.map((event) => (
-                  <EventCard key={event._id} event={event} />
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-2xl border border-[#6b9eb5]/25 bg-[#6b9eb5]/5 p-8">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#6b9eb5]/15 flex items-center justify-center shrink-0">
-                    <Calendar className="w-5 h-5 text-[#4a8098]" aria-hidden />
-                  </div>
-                  {events === null ? <EventsLoadError /> : <NoUpcomingEvents />}
+            <div data-pagefind-ignore>
+              {events && events.length > 0 ? (
+                <div className="space-y-4">
+                  {events.map((event) => (
+                    <EventCard key={event._id} event={event} />
+                  ))}
                 </div>
-              </div>
-            )}
+              ) : (
+                <div className="rounded-2xl border border-[#6b9eb5]/25 bg-[#6b9eb5]/5 p-8">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-[#6b9eb5]/15 flex items-center justify-center shrink-0">
+                      <Calendar className="w-5 h-5 text-[#4a8098]" aria-hidden />
+                    </div>
+                    {events === null ? <EventsLoadError /> : <NoUpcomingEvents />}
+                  </div>
+                </div>
+              )}
+            </div>
           </section>
+
+          {/* Weekly programs from Sanity (shown only when the county has some) */}
+          {(programs === null || programs.length > 0) && (
+            <section className="mb-12" aria-labelledby="county-programs-heading">
+              <h2 id="county-programs-heading" className="text-2xl font-bold text-warmgray-900 mb-5">
+                Weekly programs in {county.name} County
+              </h2>
+              <div data-pagefind-ignore>
+                {programs === null ? (
+                  <ProgramsLoadError />
+                ) : (
+                  <WeeklyPrograms programs={programs} gridClassName="grid grid-cols-1 sm:grid-cols-2 gap-4" />
+                )}
+              </div>
+            </section>
+          )}
 
           {/* What to expect */}
           <h2 className="text-2xl font-bold text-warmgray-900 mb-5">
