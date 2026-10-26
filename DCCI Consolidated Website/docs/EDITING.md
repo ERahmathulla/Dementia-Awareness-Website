@@ -1,6 +1,6 @@
 # Editing the website
 
-This guide is for club officers who keep **events** and **recurring programs** (like the respite Social Club schedule) up to date. You don't need to know any code. Everything is done in the editing screen, called the Studio.
+This guide is for club officers who keep **events** and **recurring programs** (the respite Social Club schedule and support groups) up to date. You don't need to know any code. Everything is done in the editing screen, called the Studio.
 
 Everything else on the site (resource pages, phone numbers, articles) is part of the website's code and is updated by the site's developer.
 
@@ -40,7 +40,15 @@ To hide an event early (for example, if it's cancelled), turn on **Hide from web
 
 ## Recurring programs
 
-Recurring programs are things that happen on the same days every week (or every month), like the Alzheimer's Project Social Clubs. Programs with the type **Respite** appear on the website's **Respite & Adult Day Programs** page, grouped by day.
+Recurring programs are things that happen on the same days every week (or every month), like the Alzheimer's Project Social Clubs and support groups. Where they appear depends on the **Program type**:
+
+| Program type | Where it appears |
+|---|---|
+| **Respite** | The **Respite & Adult Day Programs** page (grouped by day), and **Weekly Programs** on the Events page |
+| **Support group** | The **Support Groups** page, and **Recurring Support Groups** on the Events page |
+| **Class** or **Other** | **Weekly Programs** on the Events page |
+
+Every program also appears on its county's page, and in the website's search, as soon as you publish.
 
 ### Edit a respite schedule
 
@@ -60,6 +68,24 @@ If every Social Club keeps the same hours, the website shows the hours once at t
 1. Click **Recurring programs**, then **Respite**, then **Create**. The program type is filled in for you.
 2. Enter the **Name** (e.g. "Social Club at Example Church"), **Location name**, **Address** (the website shows it in brackets, e.g. "Example Church (Tallahassee)"), and **County**.
 3. Add at least one **Schedule** entry.
+4. Click **Publish**.
+
+### Edit a support group
+
+1. Click **Recurring programs**, then **Support group**.
+2. Open the group, for example **Evening Support Group**.
+3. Change what you need:
+   - **Schedule**: the day, start and end time, and **Which weeks of the month**. For a group that meets on the 2nd and 4th Tuesday, pick Tuesday and tick **2nd** and **4th**. For "last Monday of each month", tick **Last**.
+   - **Location name** and **Address** (e.g. "Immanuel Baptist Church" and "Tallahassee, FL")
+   - **Label**: the small badge on the Support Groups page, such as General, Specialized, or County
+   - **Public notes**: a short line shown under the group, e.g. "Evening scheduling for working caregivers"
+4. Click **Publish**.
+
+### Add a new support group
+
+1. Click **Recurring programs**, then **Support group**, then **Create**. The program type is filled in for you.
+2. Enter the **Name**, **Location name**, **Address**, and **County**, and add a **Schedule** entry.
+3. Optionally add a **Label** and **Public notes**.
 4. Click **Publish**.
 
 ### Pause or remove a program

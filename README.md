@@ -32,7 +32,7 @@ The app lives in the `DCCI Consolidated Website/` subfolder. The repo root holds
 Two things are edited in [Sanity](https://www.sanity.io) at https://dementia-awareness.vercel.app/studio, with no code changes needed:
 
 - **Events**, shown on the Events page and county pages
-- **Recurring programs**, such as the respite Social Club days and times on the Respite & Adult Day page
+- **Recurring programs**: the respite Social Club days and times and the support groups, shown on the Respite, Support Groups, Events, and county pages
 
 Everything else is part of the site's code. See the [editor guide](DCCI%20Consolidated%20Website/docs/EDITING.md) for step-by-step instructions, including how to edit a respite schedule.
 
