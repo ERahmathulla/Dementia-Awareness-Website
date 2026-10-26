@@ -4,10 +4,14 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft, Phone, Calendar, MapPin, ChevronRight } from 'lucide-react'
 import { OUTREACH_COUNTIES } from '@/lib/data/counties'
 import { HELPLINE_PHONE } from '@/lib/utils/constants'
+import EventCard, { EventsLoadError, NoUpcomingEvents } from '@/components/events/EventCard'
+import { getUpcomingEvents } from '@/sanity/lib/queries'
 
 interface Props {
   params: Promise<{ county: string }>
 }
+
+export const revalidate = 60
 
 export function generateStaticParams() {
   return OUTREACH_COUNTIES.map(c => ({ county: c.slug }))
@@ -28,6 +32,8 @@ export default async function CountyPage({ params }: Props) {
   const county = OUTREACH_COUNTIES.find(c => c.slug === slug)
 
   if (!county) notFound()
+
+  const events = await getUpcomingEvents(county.name)
 
   return (
     <>
@@ -84,25 +90,28 @@ export default async function CountyPage({ params }: Props) {
       {/* Placeholder content */}
       <section className="container-main section-padding">
         <div className="max-w-3xl">
-          {/* Coming soon callout */}
-          <div className="rounded-2xl border border-[#6b9eb5]/25 bg-[#6b9eb5]/5 p-8 mb-12">
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-[#6b9eb5]/15 flex items-center justify-center shrink-0">
-                <Calendar className="w-5 h-5 text-[#4a8098]" aria-hidden />
+          {/* Upcoming events from Sanity */}
+          <section className="mb-12" aria-labelledby="county-events-heading">
+            <h2 id="county-events-heading" className="text-2xl font-bold text-warmgray-900 mb-5">
+              Upcoming events in {county.name} County
+            </h2>
+            {events && events.length > 0 ? (
+              <div className="space-y-4">
+                {events.map((event) => (
+                  <EventCard key={event._id} event={event} />
+                ))}
               </div>
-              <div>
-                <h2 className="text-lg font-bold text-warmgray-900 mb-2">
-                  Events coming soon
-                </h2>
-                <p className="text-warmgray-600 leading-relaxed">
-                  Events, resource tables, volunteer opportunities, caregiver support sessions,
-                  and dementia awareness activities for{' '}
-                  <strong>{county.name} County</strong> will be listed here.
-                  Check back soon, or call our helpline for the current schedule.
-                </p>
+            ) : (
+              <div className="rounded-2xl border border-[#6b9eb5]/25 bg-[#6b9eb5]/5 p-8">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-[#6b9eb5]/15 flex items-center justify-center shrink-0">
+                    <Calendar className="w-5 h-5 text-[#4a8098]" aria-hidden />
+                  </div>
+                  {events === null ? <EventsLoadError /> : <NoUpcomingEvents />}
+                </div>
               </div>
-            </div>
-          </div>
+            )}
+          </section>
 
           {/* What to expect */}
           <h2 className="text-2xl font-bold text-warmgray-900 mb-5">
@@ -148,7 +157,7 @@ export default async function CountyPage({ params }: Props) {
             </a>
 
             <Link
-              href="/directory"
+              href={`/directory?county=${county.slug}`}
               className="flex items-center gap-3 p-5 rounded-2xl bg-white border border-warmgray-100 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warmgray-700 focus-visible:ring-offset-2"
             >
               <div className="w-10 h-10 rounded-xl bg-warmgray-100 flex items-center justify-center shrink-0">

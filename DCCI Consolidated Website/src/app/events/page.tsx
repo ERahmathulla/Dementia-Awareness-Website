@@ -1,16 +1,19 @@
 ﻿import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Calendar, MapPin, Clock, ExternalLink, Phone, Users } from 'lucide-react'
-import { formatDate, formatTime } from '@/lib/utils/formatDate'
+import { MapPin, Clock, Phone, Users } from 'lucide-react'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
+import EventCard, { EventsLoadError, NoUpcomingEvents } from '@/components/events/EventCard'
+import { getUpcomingEvents } from '@/sanity/lib/queries'
 
 export const metadata: Metadata = {
   title: 'Events & Classes',
   description: 'Upcoming dementia education events, support group schedules, and conferences in the Big Bend region.',
 }
 
-export default function EventsPage() {
-  const events: any[] = []
+export const revalidate = 60
+
+export default async function EventsPage() {
+  const events = await getUpcomingEvents()
 
   const recurringGroups = [
     { name: 'Mindful Moments (Early-Stage)', schedule: '2nd & 4th Thursday, 10–11:30am', location: "St. Paul's UMC, Tallahassee" },
@@ -67,84 +70,23 @@ export default function EventsPage() {
           </div>
         </section>
 
-        {/* Annual conference highlight */}
-        <section className="mb-12" aria-labelledby="conference-heading">
-          <h2 id="conference-heading" className="text-2xl font-bold text-warmgray-900 mb-6">
-            Annual Conference
-          </h2>
-          <div className="p-6 rounded-2xl bg-warmgray-50 border border-warmgray-200">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-warmgray-200 flex items-center justify-center shrink-0">
-                <Calendar className="w-6 h-6 text-warmgray-900" aria-hidden />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-warmgray-900 mb-1">
-                  Alzheimer's Disease Education & Training Conference
-                </h3>
-                <p className="text-sm text-warmgray-900 mb-2">
-                  <strong>June 20, 2026</strong> · 9am–4pm · FSU College of Medicine, 1115 W. Call St., Tallahassee
-                </p>
-                <p className="text-sm text-warmgray-800 mb-4">
-                  Annual conference for caregivers and healthcare professionals. Hosted by Alzheimer's Project and FSU College of Medicine.
-                </p>
-                <a
-                  href="https://alzheimersproject.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm font-medium text-warmgray-900 hover:text-warmgray-900 transition-colors"
-                >
-                  Visit Alzheimer's Project for registration
-                  <ExternalLink className="w-3.5 h-3.5" aria-hidden />
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Upcoming events from Sanity */}
-        {events.length > 0 && (
-          <section aria-labelledby="upcoming-heading">
-            <h2 id="upcoming-heading" className="text-2xl font-bold text-warmgray-900 mb-6">
-              Upcoming Events
-            </h2>
+        <section aria-labelledby="upcoming-heading">
+          <h2 id="upcoming-heading" className="text-2xl font-bold text-warmgray-900 mb-6">
+            Upcoming Events
+          </h2>
+          {events === null ? (
+            <EventsLoadError />
+          ) : events.length > 0 ? (
             <div className="space-y-4">
               {events.map((event) => (
-                <div key={event._id} className="card-base p-5 flex gap-4">
-                  <div className="flex flex-col items-center justify-center w-14 h-14 bg-warmgray-100 rounded-xl shrink-0 text-center">
-                    <span className="text-xs font-bold text-warmgray-800 uppercase leading-none">
-                      {new Date(event.startDate).toLocaleDateString('en-US', { month: 'short' })}
-                    </span>
-                    <span className="text-xl font-bold text-warmgray-900 leading-tight">
-                      {new Date(event.startDate).getDate()}
-                    </span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-bold text-warmgray-900 mb-1">{event.title}</h3>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-warmgray-500">
-                      {event.location && (
-                        <span className="flex items-center gap-1">
-                          <MapPin className="w-3.5 h-3.5" aria-hidden />
-                          {event.location}
-                        </span>
-                      )}
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5" aria-hidden />
-                        {formatTime(event.startDate)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                <EventCard key={event._id} event={event} />
               ))}
             </div>
-          </section>
-        )}
-
-        {events.length === 0 && (
-          <div className="text-center py-8 text-sm text-warmgray-500">
-            Upcoming events will appear here once the Sanity CMS is configured.<br />
-            See recurring support groups above, or call <a href="tel:+18503862778" className="text-warmgray-800 font-medium">(850) 386-2778</a>.
-          </div>
-        )}
+          ) : (
+            <NoUpcomingEvents />
+          )}
+        </section>
       </div>
     </div>
   )
