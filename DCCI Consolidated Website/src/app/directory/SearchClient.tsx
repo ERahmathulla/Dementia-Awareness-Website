@@ -3,8 +3,9 @@
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { Search } from 'lucide-react'
-import SearchResults from '@/components/search/SearchResults'
+import SearchResults, { LiveResultGroups, ResultGroupHeading } from '@/components/search/SearchResults'
 import { useSiteSearch } from '@/lib/hooks/useSiteSearch'
+import { useLiveSearch } from '@/lib/hooks/useLiveSearch'
 
 // Picks up ?q= (e.g. from the header search) on load and on client-side navigation.
 // Kept in its own Suspense boundary so the rest of the page still renders on the server.
@@ -24,6 +25,10 @@ export default function SearchClient() {
   const queryRef = useRef(query)
   queryRef.current = query
   const { status, results, total } = useSiteSearch(query)
+  const live = useLiveSearch(query)
+  const liveCount = live.events.length + live.programs.length
+  const hasAny = results.length > 0 || liveCount > 0
+  const nothingFound = (status === 'ready' || status === 'unavailable') && live.status === 'ready' && !hasAny
 
   function applyUrlQuery(q: string) {
     // Ignore stale updates from our own replaceState calls while typing
@@ -67,16 +72,25 @@ export default function SearchClient() {
         </div>
       </div>
 
-      <div className="container-main py-8 max-w-3xl">
-        {status === 'ready' && results.length > 0 && (
-          <p className="text-sm text-warmgray-500 mb-4" aria-live="polite">
-            {total} page{total !== 1 ? 's' : ''} found{total > results.length ? `, showing the top ${results.length}` : ''}
-          </p>
-        )}
-        {status === 'loading' && results.length === 0 && (
-          <p className="text-sm text-warmgray-500" aria-live="polite">Searching…</p>
-        )}
-        <SearchResults status={status} results={results} />
+      <div className="container-main py-8 max-w-3xl" aria-live="polite">
+        {hasAny ? (
+          <div className="space-y-8">
+            <LiveResultGroups events={live.events} programs={live.programs} />
+            {results.length > 0 && (
+              <section>
+                <ResultGroupHeading>Pages</ResultGroupHeading>
+                <p className="text-sm text-warmgray-500 mb-4">
+                  {total} page{total !== 1 ? 's' : ''} found{total > results.length ? `, showing the top ${results.length}` : ''}
+                </p>
+                <SearchResults status={status} results={results} />
+              </section>
+            )}
+          </div>
+        ) : nothingFound ? (
+          <SearchResults status={status} results={results} />
+        ) : query.trim() ? (
+          <p className="text-sm text-warmgray-500">Searching…</p>
+        ) : null}
       </div>
     </div>
   )

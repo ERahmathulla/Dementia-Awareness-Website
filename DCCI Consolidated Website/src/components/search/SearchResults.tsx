@@ -3,6 +3,56 @@
 import Link from 'next/link'
 import { cn } from '@/lib/utils/cn'
 import type { SiteSearchResult, SiteSearchStatus } from '@/lib/hooks/useSiteSearch'
+import type { LiveSearchItem } from '@/lib/hooks/useLiveSearch'
+
+const groupHeadingClass = 'text-xs font-semibold uppercase tracking-wider text-warmgray-500'
+
+export function ResultGroupHeading({ children, compact }: { children: React.ReactNode; compact?: boolean }) {
+  return <h2 className={cn(groupHeadingClass, compact ? 'px-4 pt-3 pb-1' : 'mb-3')}>{children}</h2>
+}
+
+// "Events" and "Weekly programs" from Sanity, shown above the page results
+export function LiveResultGroups({ events, programs, onSelect, compact }: {
+  events: LiveSearchItem[]
+  programs: LiveSearchItem[]
+  onSelect?: () => void
+  compact?: boolean
+}) {
+  const groups = [
+    { label: 'Events', items: events },
+    { label: 'Weekly programs', items: programs },
+  ].filter((g) => g.items.length > 0)
+
+  return (
+    <div className={cn(!compact && 'space-y-8')}>
+      {groups.map((group) => (
+        <section key={group.label}>
+          <ResultGroupHeading compact={compact}>{group.label}</ResultGroupHeading>
+          <ul className={cn(compact ? 'divide-y divide-warmgray-100' : 'space-y-3')} role="list">
+            {group.items.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={item.url}
+                  onClick={onSelect}
+                  className={cn(
+                    'block transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warmgray-700',
+                    compact ? 'px-4 py-3 hover:bg-warmgray-50' : 'card-base p-5 hover:bg-warmgray-50',
+                  )}
+                >
+                  <p className="text-sm font-bold text-warmgray-900">
+                    {item.title}
+                    {item.badge && <span className="badge bg-warmgray-100 text-warmgray-700 ml-2 align-middle">{item.badge}</span>}
+                  </p>
+                  <p className="text-sm text-warmgray-500 mt-1 leading-relaxed">{item.detail}</p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  )
+}
 
 interface Props {
   status: SiteSearchStatus

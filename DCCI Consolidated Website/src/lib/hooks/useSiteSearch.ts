@@ -22,10 +22,31 @@ interface PagefindSubResult {
 
 interface PagefindResultData {
   url: string
+  content: string
   excerpt: string
   meta: { title?: string }
   sub_results?: PagefindSubResult[]
 }
+
+// Pagefind falls back to loose matches for words it doesn't know (e.g. "Israel" matching "is"),
+// so keep only pages where every search word starts a word on the page. Simple plural/verb
+// endings are trimmed so "caregivers" still finds "caregiver".
+function searchWords(query: string) {
+  return query
+    .toLowerCase()
+    .split(/\s+/)
+    .map((w) => w.replace(/[^\p{L}\p{N}]/gu, ''))
+    .filter(Boolean)
+    .map((w) => (w.length > 4 ? w.replace(/(ing|ed|es|s)$/, '') : w))
+}
+
+function containsAllWords(content: string, words: string[]) {
+  const text = content.toLowerCase()
+  return words.every((word) => new RegExp(`(^|[^\\p{L}\\p{N}])${word}`, 'u').test(text))
+}
+
+// The site is small, so every candidate page can be checked
+const MAX_CANDIDATES = 100
 
 interface PagefindModule {
   options: (options: Record<string, unknown>) => Promise<void>
@@ -89,8 +110,10 @@ export function useSiteSearch(query: string, limit = 20) {
       .then(async (pagefind) => {
         const search = await pagefind.debouncedSearch(q, {}, 150)
         if (!search || cancelled) return // a newer search replaced this one
-        const data = await Promise.all(search.results.slice(0, limit).map((r) => r.data()))
-        if (!cancelled) setState({ status: 'ready', results: data.map(toResult), total: search.results.length })
+        const data = await Promise.all(search.results.slice(0, MAX_CANDIDATES).map((r) => r.data()))
+        const words = searchWords(q)
+        const matches = data.filter((d) => containsAllWords(d.content, words))
+        if (!cancelled) setState({ status: 'ready', results: matches.slice(0, limit).map(toResult), total: matches.length })
       })
       .catch(() => {
         if (!cancelled) setState({ status: 'unavailable', results: [], total: 0 })

@@ -8,16 +8,20 @@ import { Search, X, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import { useSearchStore } from '@/store/searchStore'
 import { useSiteSearch } from '@/lib/hooks/useSiteSearch'
-import SearchResults from './SearchResults'
+import { useLiveSearch } from '@/lib/hooks/useLiveSearch'
+import SearchResults, { LiveResultGroups, ResultGroupHeading } from './SearchResults'
 
 export default function SearchOverlay() {
   const { isOpen, close, query, setQuery } = useSearchStore()
   const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
-  const { status, results, total } = useSiteSearch(isOpen ? query : '', 5)
+  const activeQuery = isOpen ? query : ''
+  const { status, results, total } = useSiteSearch(activeQuery, 5)
+  const live = useLiveSearch(activeQuery)
   const fullSearchHref = query.trim() ? `/directory?q=${encodeURIComponent(query.trim())}` : '/directory'
-  // Keep showing the previous results while the next search runs
-  const showResults = Boolean(query.trim()) && status !== 'idle' && (status !== 'loading' || results.length > 0)
+  // Previous results stay visible while the next search runs
+  const hasAny = results.length > 0 || live.events.length + live.programs.length > 0
+  const nothingFound = (status === 'ready' || status === 'unavailable') && live.status === 'ready' && !hasAny
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -75,21 +79,25 @@ export default function SearchOverlay() {
               <kbd className="hidden sm:flex items-center px-1.5 py-0.5 text-xs text-warmgray-500 border border-warmgray-200 rounded">Esc</kbd>
             </div>
 
-            {showResults ? (
+            {query.trim() && hasAny ? (
               <div className="max-h-[60vh] overflow-y-auto" aria-live="polite">
-                {results.length > 0 ? (
-                  <SearchResults status={status} results={results} onSelect={close} compact />
-                ) : (
-                  <div className="px-4 py-6"><SearchResults status={status} results={results} /></div>
+                <LiveResultGroups events={live.events} programs={live.programs} onSelect={close} compact />
+                {results.length > 0 && (
+                  <section>
+                    <ResultGroupHeading compact>Pages</ResultGroupHeading>
+                    <SearchResults status={status} results={results} onSelect={close} compact />
+                  </section>
                 )}
                 {total > results.length && (
                   <div className="px-4 py-3 border-t border-warmgray-100">
                     <button type="submit" className="flex items-center gap-1.5 text-sm font-medium text-warmgray-800 hover:text-warmgray-900 transition-colors">
-                      See all {total} results <ArrowRight className="w-4 h-4" aria-hidden />
+                      See all {total} page results <ArrowRight className="w-4 h-4" aria-hidden />
                     </button>
                   </div>
                 )}
               </div>
+            ) : query.trim() && nothingFound ? (
+              <div className="px-4 py-6" aria-live="polite"><SearchResults status={status} results={results} /></div>
             ) : (
               <div className="px-4 py-6 text-center">
                 <Search className="w-8 h-8 text-warmgray-200 mx-auto mb-3" aria-hidden />
