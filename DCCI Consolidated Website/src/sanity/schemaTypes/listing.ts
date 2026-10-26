@@ -122,7 +122,7 @@ export const listing = defineType({
       title: 'Editor notes (internal)',
       type: 'text',
       rows: 3,
-      description: 'Internal only. Never shown on the website.',
+      description: 'Not private: anyone can read this through Sanity\'s API. Never put personal or sensitive information here.',
     }),
   ],
   orderings: [
