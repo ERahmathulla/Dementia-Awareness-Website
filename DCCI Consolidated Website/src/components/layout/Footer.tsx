@@ -23,7 +23,7 @@ const footerLinks = {
     { label: 'Search Resources', href: '/directory' },
     { label: 'Events & Classes', href: '/events' },
     { label: 'For Professionals', href: '/professionals' },
-    { label: 'Downloadable Guides', href: '/directory#downloads' },
+    { label: 'Downloadable Guides', href: '/signs-diagnosis/toolkit' },
   ],
   'About': [
     { label: 'About This Site', href: '/about' },

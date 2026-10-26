@@ -55,17 +55,6 @@ const courses: Course[] = [
     badge: 'Community',
     badgeColor: 'bg-warmgray-100 text-warmgray-800',
   },
-  {
-    name: 'FSU College of Medicine Annual Conference',
-    type: 'Annual — June',
-    desc: 'Alzheimer\'s Disease Education & Training Conference for caregivers and healthcare professionals. Next: June 20, 2026, 9am–4pm, FSU College of Medicine.',
-    weeks: [],
-    providers: [
-      { name: "Alzheimer's Project + FSU College of Medicine", url: 'https://alzheimersproject.org' },
-    ],
-    badge: 'Annual',
-    badgeColor: 'bg-warmgray-100 text-warmgray-800',
-  },
 ]
 
 export default function ClassesPage() {

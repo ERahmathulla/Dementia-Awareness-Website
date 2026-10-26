@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const subPages = [
   { icon: Calendar, href: '/care-services/respite', title: 'Respite & Adult Day Programs',
-    description: "Social Clubs (5 Big Bend locations), in-home respite, AmeriCorps volunteer respite for veterans, and ADI emergency respite.", accent: 'bg-warmgray-100 text-warmgray-800' },
+    description: "Social Club locations across the Big Bend, in-home respite, AmeriCorps volunteer respite for veterans, and ADI emergency respite.", accent: 'bg-warmgray-100 text-warmgray-800' },
   { icon: Home, href: '/care-services/in-home', title: 'In-Home & Community Services',
     description: 'CCE, Home Care for the Elderly (HCE), ADI in-home services, OAA meals — how the Elder Helpline intake works.', accent: 'bg-warmgray-100 text-warmgray-800' },
   { icon: Building2, href: '/care-services/long-term-care', title: 'Long-Term Care Options',
