@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "redirects": [
+    { "source": "/care-services/home-safety", "destination": "/caregiver-support/home-safety", "permanent": true }
+  ]
+}
