@@ -1,5 +1,4 @@
-import { category } from './category'
-import { listing } from './listing'
 import { event } from './event'
+import { recurringProgram } from './recurringProgram'
 
-export const schemaTypes = [listing, category, event]
+export const schemaTypes = [event, recurringProgram]

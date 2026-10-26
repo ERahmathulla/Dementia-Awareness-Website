@@ -2,20 +2,45 @@
 import Link from 'next/link'
 import { MapPin, Clock, Phone, Calendar, Users } from 'lucide-react'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
+import { getRecurringPrograms, type RecurringProgram, type ScheduleEntry } from '@/sanity/lib/queries'
+import { DAYS_OF_WEEK } from '@/sanity/options'
 
 export const metadata: Metadata = {
   title: 'Respite & Adult Day Programs',
   description: 'Social Clubs, in-home respite, and emergency respite programs for dementia caregivers in the Big Bend region.',
 }
 
-const socialClubs = [
-  { day: 'Monday', locations: ['Temple Israel (Tallahassee)', 'Lake Ellen Baptist Church (Crawfordville)'] },
-  { day: 'Tuesday', locations: ['Good Shepherd Catholic Church (Tallahassee)'] },
-  { day: 'Wednesday', locations: ['Immanuel Baptist Church (Tallahassee)'] },
-  { day: 'Friday', locations: ["St. Paul's United Methodist Church (Tallahassee)"] },
-]
+export const revalidate = 60
 
-export default function RespitePage() {
+// "09:00" -> "9am", "13:30" -> "1:30pm"
+function shortTime(value: string) {
+  const [h, m] = value.split(':').map(Number)
+  return `${h % 12 || 12}${m ? `:${String(m).padStart(2, '0')}` : ''}${h < 12 ? 'am' : 'pm'}`
+}
+
+const timeRange = (entry: ScheduleEntry) => `${shortTime(entry.startTime)}–${shortTime(entry.endTime)}`
+
+function placeLabel(program: RecurringProgram) {
+  const place = program.locationName ?? program.name
+  return program.address ? `${place} (${program.address})` : place
+}
+
+export default async function RespitePage() {
+  // Respite schedules are managed in Sanity (Studio → Recurring programs → Respite)
+  const programs = await getRecurringPrograms('Respite')
+  const entries = (programs ?? []).flatMap((program) => (program.schedule ?? []).map((entry) => ({ program, entry })))
+  const socialClubs = DAYS_OF_WEEK
+    .map((day) => ({
+      day,
+      items: entries.filter((e) => e.entry.day === day).sort((a, b) => a.entry.startTime.localeCompare(b.entry.startTime)),
+    }))
+    .filter((d) => d.items.length > 0)
+  // When every club keeps the same hours (and notes), show them once in the intro, as before
+  const ranges = new Set(entries.map((e) => timeRange(e.entry)))
+  const sharedRange = ranges.size === 1 ? [...ranges][0] : null
+  const notes = new Set((programs ?? []).map((p) => p.publicNotes?.trim() ?? ''))
+  const sharedNote = notes.size === 1 ? [...notes][0] : null
+
   return (
     <article>
       <Breadcrumbs crumbs={[
@@ -34,24 +59,47 @@ export default function RespitePage() {
           Alzheimer's Project Social Clubs (Day Respite)
         </h2>
         <p className="text-sm text-warmgray-500 mb-5">
-          Structured day programs with CNA/HHA supervision and therapeutic activities — music, art, pet therapy, guided exercise, games, and intergenerational socialization. Open <strong>9am–3pm</strong> (drop-off after 9, pickup before 3).
+          Structured day programs with CNA/HHA supervision and therapeutic activities — music, art, pet therapy, guided exercise, games, and intergenerational socialization.
+          {sharedRange && <> Open <strong>{sharedRange}</strong>{sharedNote && ` (${sharedNote})`}.</>}
         </p>
 
-        <div className="space-y-3 mb-6">
-          {socialClubs.map((club) => (
-            <div key={club.day} className="flex gap-4 p-4 rounded-xl bg-white border border-warmgray-100 shadow-card">
-              <div className="w-20 text-sm font-bold text-warmgray-900 shrink-0">{club.day}</div>
-              <div className="space-y-1">
-                {club.locations.map((loc) => (
-                  <div key={loc} className="flex items-center gap-2 text-sm text-warmgray-700">
-                    <MapPin className="w-3.5 h-3.5 text-warmgray-400 shrink-0" aria-hidden />
-                    {loc}
-                  </div>
-                ))}
+        {programs === null ? (
+          <p className="text-sm text-warmgray-600 mb-6" role="alert">
+            The Social Club schedule couldn't load right now. Call <a href="tel:+18503862778" className="font-semibold underline">(850) 386-2778</a> for current days and times.
+          </p>
+        ) : socialClubs.length === 0 ? (
+          <p className="text-sm text-warmgray-600 mb-6">
+            No Social Club days are listed right now. Call <a href="tel:+18503862778" className="font-semibold underline">(850) 386-2778</a> for the current schedule.
+          </p>
+        ) : (
+          <div className="space-y-3 mb-6">
+            {socialClubs.map((club) => (
+              <div key={club.day} className="flex gap-4 p-4 rounded-xl bg-white border border-warmgray-100 shadow-card">
+                <div className="w-20 text-sm font-bold text-warmgray-900 shrink-0">{club.day}</div>
+                <div className="space-y-1">
+                  {club.items.map(({ program, entry }) => (
+                    <div key={`${program._id}-${entry._key}`}>
+                      <div className="flex items-center gap-2 text-sm text-warmgray-700">
+                        <MapPin className="w-3.5 h-3.5 text-warmgray-400 shrink-0" aria-hidden />
+                        <span>
+                          {placeLabel(program)}
+                          {(entry.weeks?.length || !sharedRange) && (
+                            <span className="text-warmgray-500">
+                              {' · '}{entry.weeks?.length ? `${entry.weeks.join(' & ')} ${club.day}, ` : ''}{timeRange(entry)}
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                      {program.publicNotes && sharedNote === null && (
+                        <p className="text-xs text-warmgray-500 pl-[22px]">{program.publicNotes}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <div className="p-5 rounded-2xl bg-warmgray-50 border border-warmgray-200">
           <h3 className="text-sm font-bold text-warmgray-900 mb-2">How to get started</h3>

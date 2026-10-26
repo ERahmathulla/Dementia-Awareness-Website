@@ -1,54 +1,11 @@
 import type { StructureResolver } from 'sanity/structure'
 import { apiVersion } from './env'
-
-// Listings verified before this date (or never) show under "Needs review".
-function reviewCutoff() {
-  const d = new Date()
-  d.setFullYear(d.getFullYear() - 1)
-  return d.toISOString().slice(0, 10)
-}
+import { PROGRAM_TYPES } from './options'
 
 export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
-      S.listItem()
-        .title('All listings')
-        .schemaType('listing')
-        .child(S.documentTypeList('listing').title('All listings').apiVersion(apiVersion)),
-      S.listItem()
-        .title('Listings by category')
-        .child(
-          S.documentTypeList('category')
-            .title('Listings by category')
-            .apiVersion(apiVersion)
-            .defaultOrdering([{ field: 'order', direction: 'asc' }])
-            .child((categoryId) =>
-              S.documentTypeList('listing')
-                .title('Listings')
-                .apiVersion(apiVersion)
-                .filter('_type == "listing" && category._ref == $categoryId')
-                .params({ categoryId }),
-            ),
-        ),
-      S.listItem()
-        .title('Needs review')
-        .child(() =>
-          S.documentTypeList('listing')
-            .title('Needs review (not verified in 12 months)')
-            .apiVersion(apiVersion)
-            .filter('_type == "listing" && (!defined(lastVerified) || lastVerified < $cutoff)')
-            .params({ cutoff: reviewCutoff() }),
-        ),
-      S.listItem()
-        .title('Hidden listings')
-        .child(
-          S.documentTypeList('listing')
-            .title('Hidden listings')
-            .apiVersion(apiVersion)
-            .filter('_type == "listing" && hidden == true'),
-        ),
-      S.divider(),
       S.listItem()
         .title('Upcoming events')
         .child(
@@ -69,12 +26,28 @@ export const structure: StructureResolver = (S) =>
         ),
       S.divider(),
       S.listItem()
-        .title('Categories')
-        .schemaType('category')
+        .title('Recurring programs')
+        .schemaType('recurringProgram')
         .child(
-          S.documentTypeList('category')
-            .title('Categories')
-            .apiVersion(apiVersion)
-            .defaultOrdering([{ field: 'order', direction: 'asc' }]),
+          S.list()
+            .title('Recurring programs')
+            .items(
+              PROGRAM_TYPES.map((programType) =>
+                S.listItem()
+                  .id(programType.toLowerCase().replace(/\s+/g, '-'))
+                  .title(programType)
+                  .schemaType('recurringProgram')
+                  .child(
+                    S.documentTypeList('recurringProgram')
+                      .title(programType)
+                      .apiVersion(apiVersion)
+                      .filter('_type == "recurringProgram" && programType == $programType')
+                      .params({ programType })
+                      .initialValueTemplates([
+                        S.initialValueTemplateItem('recurringProgram-by-type', { programType }),
+                      ]),
+                  ),
+              ),
+            ),
         ),
     ])
