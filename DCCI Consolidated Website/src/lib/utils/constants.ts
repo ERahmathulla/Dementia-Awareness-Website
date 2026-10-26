@@ -70,27 +70,6 @@ export const NAV_LINKS = [
   },
 ] as const
 
-export const BIG_BEND_COUNTIES = [
-  'Leon', 'Jefferson', 'Wakulla', 'Franklin', 'Gadsden', 'Gulf', 'Madison', 'Taylor',
-] as const
-
-export const RESOURCE_CATEGORY_LABELS: Record<string, string> = {
-  'helpline': 'Helpline & First Contact',
-  'diagnosis': 'Diagnosis & Evaluation',
-  'respite': 'Respite & Adult Day',
-  'support-group': 'Support Group',
-  'caregiver-education': 'Caregiver Education',
-  'in-home-care': 'In-Home Care',
-  'long-term-care': 'Long-Term Care',
-  'financial': 'Financial & Insurance',
-  'legal': 'Legal Planning',
-  'safety-emergency': 'Safety & Emergency',
-  'transportation': 'Transportation',
-  'brain-health': 'Brain Health & Prevention',
-  'research': 'Research & Trials',
-  'professional-training': 'Professional Training',
-}
-
 export const EMERGENCY_NUMBERS = [
   { label: 'Emergency', number: '911', description: 'Life-threatening emergencies' },
   { label: 'Suicide & Crisis', number: '988', description: '24/7 mental health crisis support' },
