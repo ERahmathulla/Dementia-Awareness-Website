@@ -56,14 +56,15 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 mb-4 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warmgray-700 rounded w-fit">
-              <video
-                src="/brain.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-9 h-9 rounded-xl object-cover"
-                aria-hidden={true}
+              {/* Light background keeps the dark line drawing visible on the dark footer */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brain-draw-still.png"
+                alt=""
+                aria-hidden="true"
+                width={36}
+                height={36}
+                className="w-9 h-9 rounded-xl object-contain bg-white"
               />
               <div>
                 <div className="text-sm font-bold text-white group-hover:text-warmgray-300 transition-colors">Big Bend Brain Health</div>
@@ -141,27 +142,6 @@ export default function Footer() {
               <span>© {year} {SITE_NAME}.</span>
               <span>Information provided for educational purposes only.</span>
             </div>
-            <span className="hidden sm:inline text-warmgray-800" aria-hidden>·</span>
-            <span>
-              Brain animation by{' '}
-              <a
-                href="https://iconscout.com/contributors/robin-donvai"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-warmgray-400 transition-colors"
-              >
-                Robin's Pixel
-              </a>
-              {' '}on{' '}
-              <a
-                href="https://iconscout.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-warmgray-400 transition-colors"
-              >
-                IconScout
-              </a>
-            </span>
             <span className="hidden sm:inline text-warmgray-800" aria-hidden>·</span>
             <span>Website created by Emaad Rahmathulla</span>
           </div>

@@ -47,17 +47,22 @@ export default function SearchOverlay() {
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && close()}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm data-[state=open]:animate-backdrop-in" />
+        {/* Anchored with left/right insets rather than left-1/2 + translate: the scale-in
+            animation sets transform, which would cancel a translate and push the dialog
+            half off-screen. On phones it's top-anchored and capped to the dynamic viewport
+            height, so the on-screen keyboard can't hide it. */}
         <Dialog.Content
           className={cn(
-            'fixed left-1/2 top-[10vh] z-50 w-full max-w-xl -translate-x-1/2',
+            'fixed inset-x-4 top-4 sm:top-[10vh] z-50 mx-auto max-w-xl',
+            'flex flex-col max-h-[calc(100vh-2rem)] supports-[height:100dvh]:max-h-[calc(100dvh-2rem)] sm:max-h-none',
             'bg-white rounded-2xl shadow-overlay',
             'data-[state=open]:animate-scale-in focus:outline-none'
           )}
         >
           <Dialog.Title className="sr-only">Search resources</Dialog.Title>
 
-          <form onSubmit={handleSubmit}>
-            <div className="flex items-center gap-3 px-4 py-3.5 border-b border-warmgray-100">
+          <form onSubmit={handleSubmit} className="flex flex-col min-h-0">
+            <div className="shrink-0 flex items-center gap-3 px-4 py-3.5 border-b border-warmgray-100">
               <Search className="w-5 h-5 text-warmgray-400 shrink-0" aria-hidden />
               <input
                 ref={inputRef}
@@ -66,7 +71,7 @@ export default function SearchOverlay() {
                 placeholder="Search resources…"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="flex-1 bg-transparent text-warmgray-900 placeholder:text-warmgray-400 text-base outline-none"
+                className="flex-1 min-w-0 bg-transparent text-warmgray-900 placeholder:text-warmgray-400 text-[16px] sm:text-base outline-none"
                 aria-label="Search"
               />
               {query && (
@@ -77,10 +82,13 @@ export default function SearchOverlay() {
                 </button>
               )}
               <kbd className="hidden sm:flex items-center px-1.5 py-0.5 text-xs text-warmgray-500 border border-warmgray-200 rounded">Esc</kbd>
+              <Dialog.Close className="sm:hidden shrink-0 px-1 py-1 rounded text-sm font-medium text-warmgray-700 hover:text-warmgray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warmgray-700">
+                Cancel
+              </Dialog.Close>
             </div>
 
             {query.trim() && hasAny ? (
-              <div className="max-h-[60vh] overflow-y-auto" aria-live="polite">
+              <div className="min-h-0 overflow-y-auto overscroll-contain sm:max-h-[60vh]" aria-live="polite">
                 <LiveResultGroups events={live.events} programs={live.programs} onSelect={close} compact />
                 {results.length > 0 && (
                   <section>
@@ -108,7 +116,7 @@ export default function SearchOverlay() {
             )}
           </form>
 
-          <div className="px-4 py-2.5 border-t border-warmgray-100 flex items-center justify-between text-xs text-warmgray-400">
+          <div className="shrink-0 px-4 py-2.5 border-t border-warmgray-100 flex items-center justify-between text-xs text-warmgray-400">
             <span className="flex items-center gap-1">
               <kbd className="text-xs border border-warmgray-200 rounded px-1 py-0.5">↵</kbd> all results
             </span>

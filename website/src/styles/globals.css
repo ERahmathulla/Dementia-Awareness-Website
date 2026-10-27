@@ -194,3 +194,10 @@
     text-wrap: balance;
   }
 }
+
+/* Header brain logo: never show the iOS play-button overlay. If autoplay is blocked
+   (e.g. Low Power Mode), the poster shows the finished brain instead. */
+.brain-logo-video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
