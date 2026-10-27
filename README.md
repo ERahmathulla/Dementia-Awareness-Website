@@ -60,7 +60,6 @@ Then open http://localhost:3000.
 ## Credits
 
 - Website created by Emaad Rahmathulla
-- Brain animation by [Robin's Pixel](https://iconscout.com/contributors/robin-donvai) on [IconScout](https://iconscout.com)
 - Caregiver videos are linked from their original sources (UCLA Health, the Alzheimer's Project, Teepa Snow's Positive Approach to Care, and others), and each is credited on its card
 
 ## Disclaimer

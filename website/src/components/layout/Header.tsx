@@ -1,5 +1,6 @@
 ﻿'use client'
 
+import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Search, Menu } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
@@ -12,6 +13,12 @@ export default function Header() {
   const { isVisible, isScrolled } = useScrollHeader(50)
   const { toggleMobileMenu } = useMenuStore()
   const { open: openSearch } = useSearchStore()
+  const logoVideoRef = useRef<HTMLVideoElement>(null)
+
+  // With reduced motion the still image shows instead; stop the hidden video from playing
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) logoVideoRef.current?.pause()
+  }, [])
 
   return (
     <header
@@ -32,14 +39,27 @@ export default function Header() {
           className="flex items-center gap-3 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warmgray-700 rounded-lg group"
           aria-label="Big Bend Brain Health — Home"
         >
+          {/* Draws once, then stays on the finished brain (the poster shows it if autoplay is blocked).
+              The header lives in the root layout, so client-side navigation doesn't restart it. */}
           <video
-            src="/brain.mp4"
+            ref={logoVideoRef}
+            src="/brain-draw.mp4"
+            poster="/brain-draw-still.png"
             autoPlay
-            loop
             muted
             playsInline
-            className="w-[95px] h-[95px] rounded-xl object-cover shadow-sm group-hover:shadow-md transition-shadow"
-            aria-hidden={true}
+            preload="auto"
+            aria-hidden="true"
+            className="brain-logo-video w-[95px] h-[95px] object-contain mix-blend-multiply motion-reduce:hidden"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brain-draw-still.png"
+            alt=""
+            aria-hidden="true"
+            width={95}
+            height={95}
+            className="hidden motion-reduce:block w-[95px] h-[95px] object-contain"
           />
           <div className="hidden sm:block leading-tight">
             <div className="text-sm font-bold text-warmgray-900 group-hover:text-warmgray-900 transition-colors">
