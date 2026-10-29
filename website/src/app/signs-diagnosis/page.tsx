@@ -50,10 +50,10 @@ export default function SignsDiagnosisPage() {
         <div className="flex items-start gap-3">
           <Phone className="w-5 h-5 text-warmgray-800 shrink-0 mt-0.5" aria-hidden />
           <div>
-            <p className="text-sm font-semibold text-warmgray-900 mb-0.5">Not sure where to start? Call the helpline.</p>
+            <p className="text-sm font-semibold text-warmgray-900 mb-0.5">Not sure where to start? Call a helpline.</p>
             <p className="text-sm text-warmgray-900">
-              The <strong>Alzheimer's Project Helpline</strong> is free and available Mon–Fri, 9am–5pm.{' '}
-              <a href="tel:+18503862778" className="font-semibold underline hover:text-warmgray-900 transition-colors">(850) 386-2778</a>
+              The <strong>Alzheimer's Association 24/7 Helpline</strong> is available any time, day or night.{' '}
+              <a href="tel:+18002723900" className="font-semibold underline hover:text-warmgray-900 transition-colors">800-272-3900</a>
             </p>
           </div>
         </div>

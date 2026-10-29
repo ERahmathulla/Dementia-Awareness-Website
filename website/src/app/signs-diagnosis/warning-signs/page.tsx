@@ -160,16 +160,16 @@ export default function WarningSigns() {
           Noticing some of these warning signs?
         </h2>
         <p className="text-sm text-warmgray-900 mb-5 leading-relaxed">
-          The next step is talking to a doctor. Download our free toolkit with checklists and questions to bring to your appointment, or call the helpline to speak with someone now.
+          The next step is talking to a doctor. Download our free toolkit with checklists and questions to bring to your appointment, or call the Alzheimer's Association 24/7 Helpline to speak with someone now.
         </p>
         <div className="flex flex-wrap gap-3">
           <Link href="/signs-diagnosis/toolkit" className="btn-primary text-sm">
             <ArrowRight className="w-4 h-4" aria-hidden />
             Get the free toolkit
           </Link>
-          <a href="tel:+18503862778" className="btn-secondary text-sm">
+          <a href="tel:+18002723900" className="btn-secondary text-sm">
             <Phone className="w-4 h-4" aria-hidden />
-            Call (850) 386-2778
+            Call 800-272-3900
           </a>
         </div>
       </div>

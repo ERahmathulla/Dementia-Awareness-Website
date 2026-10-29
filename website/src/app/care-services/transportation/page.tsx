@@ -11,7 +11,7 @@ const transportOptions = [
   { name: 'ADI / CCE Transportation Services', desc: 'Transportation to medical appointments and community activities as part of in-home and community service packages. Access through the Elder Helpline.', phone: '866-467-4624' },
   { name: 'Senior Transportation Programs', desc: 'Leon County Transit offers reduced-fare services for seniors. Contact your county transportation department for local options.', phone: null },
   { name: 'Medical Transport', desc: 'Medicaid Non-Emergency Medical Transportation (NEMT) covers rides to Medicaid-covered medical appointments. Request through your managed care plan.', phone: null },
-  { name: 'Volunteer Driver Programs', desc: 'Some faith communities and nonprofits provide volunteer driver services for medical appointments. Contact the Alzheimer\'s Project helpline for current local options.', phone: '(850) 386-2778' },
+  { name: 'Volunteer Driver Programs', desc: 'Some faith communities and nonprofits provide volunteer driver services for medical appointments.', phone: null },
 ]
 
 export default function TransportationPage() {

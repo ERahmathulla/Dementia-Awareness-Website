@@ -28,7 +28,7 @@ export default async function SupportGroupsPage() {
         All groups listed here are <strong>free</strong> and require <strong>no RSVP</strong>. Facilitated by trained professionals through the Alzheimer's Project.
       </p>
       <p className="text-sm text-warmgray-400 mb-8">
-        Dates and times subject to change. Call <a href="tel:+18503862778" className="text-warmgray-800 font-medium hover:text-warmgray-900 transition-colors">(850) 386-2778</a> to confirm or for questions.
+        Dates and times subject to change. Call <a href="tel:+18503862778" className="text-warmgray-800 font-medium hover:text-warmgray-900 transition-colors">(850) 386-2778</a> to confirm.
       </p>
 
       {/* Kept out of the static search index; live search covers Sanity content */}

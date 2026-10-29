@@ -93,7 +93,7 @@ export default function DiseaseStages() {
 
       <div className="p-5 rounded-2xl bg-warmgray-50 border border-warmgray-200">
         <p className="text-sm font-semibold text-warmgray-900 mb-1">Get personalized guidance for where you are now</p>
-        <p className="text-sm text-warmgray-900 mb-4">The TMH Memory Disorder Clinic social worker and the Alzheimer's Project helpline can help you understand what to expect and which services are right for your situation.</p>
+        <p className="text-sm text-warmgray-900 mb-4">The TMH Memory Disorder Clinic social worker and the Alzheimer's Association 24/7 Helpline (<a href="tel:+18002723900" className="font-semibold underline">800-272-3900</a>) can help you understand what to expect and which services are right for your situation.</p>
         <div className="flex flex-wrap gap-3">
           <Link href="/signs-diagnosis/getting-evaluated" className="btn-primary text-sm">Get evaluated</Link>
           <Link href="/care-services/respite" className="btn-secondary text-sm">Find respite care</Link>

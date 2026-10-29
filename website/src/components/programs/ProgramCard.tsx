@@ -67,8 +67,7 @@ export function WeeklyPrograms({
 export function ProgramsLoadError() {
   return (
     <p className="text-sm text-warmgray-600" role="alert">
-      Weekly programs couldn't load right now. Call the Alzheimer's Project at{' '}
-      <a href="tel:+18503862778" className="font-semibold text-warmgray-800 underline">(850) 386-2778</a> for current days and times.
+      Weekly programs couldn't load right now. Please try again in a few minutes.
     </p>
   )
 }

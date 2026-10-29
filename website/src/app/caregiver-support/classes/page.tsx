@@ -130,7 +130,7 @@ export default function ClassesPage() {
           <div>
             <p className="text-sm font-semibold text-warmgray-900 mb-1">Not sure which program is right for you?</p>
             <p className="text-sm text-warmgray-900 mb-3">
-              Call the Alzheimer's Project at <a href="tel:+18503862778" className="font-semibold underline hover:text-warmgray-900">(850) 386-2778</a> — they can help match you to the right program and let you know the next available session.
+              Each program above lists who to contact about eligibility and the next available session.
             </p>
             <Link href="/events" className="text-sm font-medium text-warmgray-900 hover:text-warmgray-900 transition-colors flex items-center gap-1">
               See upcoming class dates <ArrowRight className="w-3.5 h-3.5" aria-hidden />
