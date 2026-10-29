@@ -14,7 +14,7 @@ This website compiles and organizes information on dementia, caregiver education
 - **County outreach pages:** events and resources for Leon, Wakulla, Gadsden, Jefferson, Madison, Taylor, Liberty, Franklin, and Calhoun counties
 - **Emergency resources:** crisis lines and urgent contacts, available from every page
 
-## Partner organizations
+## Featured organizations
 
 Alzheimer's Project · TMH Memory Disorder Clinic · FSU REACH · Advantage Aging Solutions · Big Bend AHEC · Florida Department of Elder Affairs · Big Bend Healthcare Coalition
 

@@ -2,7 +2,7 @@
 import { Phone, Mail, ExternalLink, Heart } from 'lucide-react'
 import { SITE_NAME, HELPLINE_PHONE, ELDER_HELPLINE, NAV_LINKS } from '@/lib/utils/constants'
 
-const partnerOrgs = [
+const featuredOrgs = [
   { name: "Alzheimer's Project", phone: '(850) 386-2778', url: 'https://alzheimersproject.org' },
   { name: 'TMH Memory Disorder Clinic', phone: '(850) 431-5001', url: 'https://tmh.org' },
   { name: 'FSU REACH', email: 'connect.reach@med.fsu.edu', url: 'https://reach.med.fsu.edu' },
@@ -27,7 +27,7 @@ const footerLinks = {
   ],
   'About': [
     { label: 'About This Site', href: '/about' },
-    { label: 'Partner Organizations', href: '/about#partners' },
+    { label: 'Featured Organizations', href: '/about#organizations' },
     { label: 'Contact Us', href: '/about#contact' },
     { label: 'Add / Update a Listing', href: '/about#listing' },
   ],
@@ -108,13 +108,13 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Partner organizations */}
+        {/* Featured organizations */}
         <div className="mt-10 pt-8 border-t border-warmgray-800">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-warmgray-500 mb-4">
-            Partner Organizations
+            Featured Organizations
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {partnerOrgs.map((org) => (
+            {featuredOrgs.map((org) => (
               <a
                 key={org.name}
                 href={org.url}

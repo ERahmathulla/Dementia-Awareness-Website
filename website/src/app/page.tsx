@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
 }
 
-const partnerOrgs = [
+const featuredOrgs = [
   "Alzheimer's Project",
   'TMH Memory Disorder Clinic',
   'FSU REACH',
@@ -64,7 +64,7 @@ const featuredLinks = [
 const stats = [
   { value: '17', label: 'Memory Disorder Clinics in Florida' },
   { value: '8', label: 'Big Bend counties served' },
-  { value: '7', label: 'Partner organizations' },
+  { value: '7', label: 'Featured organizations' },
   { value: '24/7', label: "Alzheimer's Association helpline" },
 ]
 
@@ -196,7 +196,7 @@ export default function Home() {
                 This site brings together resources from seven Big Bend organizations into one easy-to-navigate hub — so you never have to wonder which organization to call.
               </p>
               <ul className="space-y-3 mb-8" role="list">
-                {partnerOrgs.map((org) => (
+                {featuredOrgs.map((org) => (
                   <li key={org} className="flex items-center gap-3 text-sm text-warmgray-600">
                     <div className="w-2 h-2 rounded-full bg-warmgray-400 shrink-0" aria-hidden />
                     {org}

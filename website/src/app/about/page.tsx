@@ -5,10 +5,10 @@ import BrainIcon from '@/components/ui/BrainIcon'
 
 export const metadata: Metadata = {
   title: 'About',
-  description: 'About the Big Bend Brain Health hub — who built it, why, and which organizations contributed.',
+  description: 'About the Big Bend Brain Health hub — who built it, why, and which organizations it features.',
 }
 
-const partners = [
+const featuredOrgs = [
   { name: "Alzheimer's Project", abbr: 'AP', url: 'https://alzheimersproject.org', phone: '(850) 386-2778', desc: "Helpline, day respite, support groups, caregiver education, and the region's memory care backbone." },
   { name: 'TMH Memory Disorder Clinic', abbr: 'TMH MDC', url: 'https://tmh.org', phone: '(850) 431-5001', desc: 'State-designated Memory Disorder Clinic: neurological evaluation, neuropsychological testing, social-work support.' },
   { name: 'FSU REACH', abbr: 'REACH', url: 'https://reach.med.fsu.edu', phone: null, email: 'connect.reach@med.fsu.edu', desc: 'Research, education, and community engagement on aging and dementia. Resource portal and symposia.' },
@@ -52,11 +52,11 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Partner organizations */}
-        <section id="partners" aria-labelledby="partners-heading">
-          <h2 id="partners-heading" className="text-2xl font-bold text-warmgray-900 mb-6">Partner Organizations</h2>
+        {/* Featured organizations */}
+        <section id="organizations" aria-labelledby="organizations-heading">
+          <h2 id="organizations-heading" className="text-2xl font-bold text-warmgray-900 mb-6">Featured Organizations</h2>
           <div className="space-y-4">
-            {partners.map((org) => (
+            {featuredOrgs.map((org) => (
               <div key={org.name} className="card-base p-5 flex gap-4">
                 <div className="w-10 h-10 rounded-xl bg-warmgray-100 flex items-center justify-center shrink-0 text-xs font-bold text-warmgray-900">
                   {org.abbr.slice(0, 2)}
@@ -86,6 +86,9 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+          <p className="text-xs text-warmgray-500 mt-4">
+            Organizations are listed for information only. Being listed does not mean partnership with or endorsement by this site.
+          </p>
         </section>
 
         {/* Contact */}
