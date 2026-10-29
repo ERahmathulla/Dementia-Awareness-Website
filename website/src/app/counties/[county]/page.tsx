@@ -140,10 +140,8 @@ export default async function CountyPage({ params }: Props) {
             What outreach looks like in {county.name} County
           </h2>
           <p className="text-warmgray-500 leading-relaxed mb-6">
-            Dementia outreach in the Big Bend region reaches families through community
-            partnerships — at churches, libraries, senior centers, health fairs, and
-            volunteer-led events. When events are scheduled in {county.name} County,
-            this page will list dates, locations, and what to bring.
+            Dementia outreach in the Big Bend reaches families where they already gather — at
+            churches, libraries, senior centers, health fairs, and volunteer-led events.
           </p>
 
           <ul className="space-y-4 mb-12" role="list">
@@ -152,7 +150,7 @@ export default async function CountyPage({ params }: Props) {
               'Resource tables with printed guides and referral cards',
               'Caregiver support circles and listening sessions',
               'Volunteer opportunities for students and community members',
-              'Connections to local partner organizations',
+              'Connections to local organizations and services',
             ].map(item => (
               <li key={item} className="flex items-start gap-3 text-warmgray-600">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#6b9eb5] mt-2.5 shrink-0" aria-hidden />
@@ -193,6 +191,12 @@ export default async function CountyPage({ params }: Props) {
               </div>
             </Link>
           </div>
+
+          {/* Closing */}
+          <p className="text-warmgray-500 leading-relaxed mt-12">
+            We're planning more dementia education and caregiver events in {county.name} County.
+            As they're scheduled, you'll find dates, locations, and details right here, so check back soon.
+          </p>
         </div>
       </section>
 

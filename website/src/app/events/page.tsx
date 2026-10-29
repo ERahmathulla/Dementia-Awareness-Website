@@ -24,7 +24,7 @@ export default async function EventsPage() {
           <Breadcrumbs crumbs={[{ label: 'Events & Stay Connected' }]} />
           <h1 className="text-3xl font-bold text-warmgray-900 mb-2">Events & Classes</h1>
           <p className="text-warmgray-500 max-w-xl">
-            Support groups, education classes, and community events from all partner organizations.
+            Support groups, education classes, and community events from local organizations.
           </p>
         </div>
       </div>
