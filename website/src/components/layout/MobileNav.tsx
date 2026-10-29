@@ -9,7 +9,7 @@ import { X, ChevronDown, Phone, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import { useMenuStore } from '@/store/menuStore'
 import { useBodyScrollLock } from '@/lib/hooks/useBodyScrollLock'
-import { NAV_LINKS, HELPLINE_PHONE } from '@/lib/utils/constants'
+import { NAV_LINKS, ALZ_ASSOCIATION_HELPLINE } from '@/lib/utils/constants'
 
 export default function MobileNav() {
   const { isMobileMenuOpen, closeMobileMenu } = useMenuStore()
@@ -180,11 +180,11 @@ export default function MobileNav() {
               Emergency Resources
             </Link>
             <a
-              href={`tel:+18503862778`}
+              href="tel:+18002723900"
               className="flex items-center justify-center gap-2 w-full text-xs font-medium text-warmgray-600 hover:text-warmgray-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warmgray-700 rounded"
             >
               <Phone className="w-3.5 h-3.5" aria-hidden />
-              Helpline: {HELPLINE_PHONE}
+              24/7 Alzheimer's Association Helpline: {ALZ_ASSOCIATION_HELPLINE}
             </a>
           </div>
         </Dialog.Content>

@@ -68,8 +68,7 @@ export default function SearchResults({ status, results, onSelect, compact }: Pr
   if (status === 'unavailable') {
     return (
       <p className="text-sm text-warmgray-500" role="alert">
-        Search isn't available right now. Please try again later, or call the Alzheimer's Project at{' '}
-        <a href="tel:+18503862778" className="font-semibold text-warmgray-800 underline">(850) 386-2778</a>.
+        Search isn't available right now. Please try again later.
       </p>
     )
   }
@@ -77,8 +76,7 @@ export default function SearchResults({ status, results, onSelect, compact }: Pr
   if (status === 'ready' && results.length === 0) {
     return (
       <p className="text-sm text-warmgray-500">
-        No matches. Try different words, or call the Alzheimer's Project at{' '}
-        <a href="tel:+18503862778" className="font-semibold text-warmgray-800 underline">(850) 386-2778</a> or the Elder Helpline at{' '}
+        No matches. Try different words, or call the Elder Helpline at{' '}
         <a href="tel:+18009635337" className="font-semibold text-warmgray-800 underline">1-800-963-5337</a>.
       </p>
     )

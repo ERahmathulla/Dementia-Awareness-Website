@@ -1,7 +1,8 @@
 export const SITE_NAME = 'Big Bend Brain Health'
 export const SITE_DESCRIPTION = 'A consolidated hub for dementia caregiving resources, memory care, and support in the Big Bend region of Florida.'
 
-export const HELPLINE_PHONE = '(850) 386-2778'
+// Alzheimer's Association 24/7 Helpline (national)
+export const ALZ_ASSOCIATION_HELPLINE = '800-272-3900'
 export const ELDER_HELPLINE = '1-800-963-5337'
 export const ELDER_HELPLINE_LOCAL = '866-467-4624'
 export const SENIOR_LEGAL_HELPLINE = '1-888-895-7873'
@@ -74,7 +75,7 @@ export const EMERGENCY_NUMBERS = [
   { label: 'Emergency', number: '911', description: 'Life-threatening emergencies' },
   { label: 'Suicide & Crisis', number: '988', description: '24/7 mental health crisis support' },
   { label: '211 Big Bend', number: '211', description: '24-hr crisis counseling & referral' },
-  { label: "Alzheimer's Project", number: '(850) 386-2778', description: 'Mon–Fri 9am–5pm (not a 24-hr helpline)' },
+  { label: "Alzheimer's Association Helpline", number: '800-272-3900', description: '24/7 dementia support line' },
   { label: 'Florida Dept. of Elder Affairs', number: '1-800-963-5337', description: 'Statewide resource navigation' },
   { label: 'Florida Senior Legal Helpline', number: '1-888-895-7873', description: 'Free legal assistance for seniors' },
   { label: 'Tallahassee Memorial', number: '(850) 431-1155', description: 'TMH main line' },

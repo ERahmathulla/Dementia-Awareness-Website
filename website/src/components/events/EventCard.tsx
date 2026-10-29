@@ -54,8 +54,7 @@ export default function EventCard({ event }: { event: SiteEvent }) {
 export function NoUpcomingEvents() {
   return (
     <p className="text-sm text-warmgray-600">
-      No upcoming events right now. Check back soon, or call the Alzheimer's Project at{' '}
-      <a href="tel:+18503862778" className="font-semibold text-warmgray-800 underline">(850) 386-2778</a> for local programs.
+      No upcoming events right now. Check back soon.
     </p>
   )
 }
@@ -63,8 +62,7 @@ export function NoUpcomingEvents() {
 export function EventsLoadError() {
   return (
     <p className="text-sm text-warmgray-600" role="alert">
-      Events couldn't load right now. Please try again in a few minutes, or call the Alzheimer's Project at{' '}
-      <a href="tel:+18503862778" className="font-semibold text-warmgray-800 underline">(850) 386-2778</a>.
+      Events couldn't load right now. Please try again in a few minutes.
     </p>
   )
 }

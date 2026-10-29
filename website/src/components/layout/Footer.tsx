@@ -1,6 +1,6 @@
 ﻿import Link from 'next/link'
 import { Phone, Mail, ExternalLink, Heart } from 'lucide-react'
-import { SITE_NAME, HELPLINE_PHONE, ELDER_HELPLINE, NAV_LINKS } from '@/lib/utils/constants'
+import { SITE_NAME, ALZ_ASSOCIATION_HELPLINE, ELDER_HELPLINE, NAV_LINKS } from '@/lib/utils/constants'
 
 const featuredOrgs = [
   { name: "Alzheimer's Project", phone: '(850) 386-2778', url: 'https://alzheimersproject.org' },
@@ -75,9 +75,9 @@ export default function Footer() {
               A consolidated resource hub for dementia caregiving, memory care, and community support across the Big Bend region of Florida.
             </p>
             <div className="space-y-1.5 text-sm">
-              <a href={`tel:+18503862778`} className="flex items-center gap-2 text-warmgray-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-warmgray-700 rounded">
+              <a href="tel:+18002723900" className="flex items-center gap-2 text-warmgray-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-warmgray-700 rounded">
                 <Phone className="w-3.5 h-3.5 shrink-0 text-warmgray-400" aria-hidden />
-                {HELPLINE_PHONE} (Helpline)
+                {ALZ_ASSOCIATION_HELPLINE} (24/7 Alzheimer's Association Helpline)
               </a>
               <a href={`tel:+18009635337`} className="flex items-center gap-2 text-warmgray-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-warmgray-700 rounded">
                 <Phone className="w-3.5 h-3.5 shrink-0 text-warmgray-400" aria-hidden />

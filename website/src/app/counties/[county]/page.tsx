@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, Phone, Calendar, MapPin, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, ChevronRight } from 'lucide-react'
 import { OUTREACH_COUNTIES } from '@/lib/data/counties'
-import { HELPLINE_PHONE } from '@/lib/utils/constants'
 import EventCard, { EventsLoadError, NoUpcomingEvents } from '@/components/events/EventCard'
 import { ProgramsLoadError, WeeklyPrograms } from '@/components/programs/ProgramCard'
 import { getRecurringPrograms, getUpcomingEvents } from '@/sanity/lib/queries'
@@ -161,21 +160,6 @@ export default async function CountyPage({ params }: Props) {
 
           {/* CTA strip */}
           <div className="grid gap-4 sm:grid-cols-2">
-            <a
-              href={`tel:+18503862778`}
-              className="flex items-center gap-3 p-5 rounded-2xl bg-white border border-warmgray-100 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warmgray-700 focus-visible:ring-offset-2"
-            >
-              <div className="w-10 h-10 rounded-xl bg-warmgray-100 flex items-center justify-center shrink-0">
-                <Phone className="w-5 h-5 text-warmgray-700" aria-hidden />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-warmgray-500 uppercase tracking-wide mb-0.5">
-                  Call for current schedule
-                </p>
-                <p className="text-sm font-bold text-warmgray-900">{HELPLINE_PHONE}</p>
-              </div>
-            </a>
-
             <Link
               href="/directory"
               className="flex items-center gap-3 p-5 rounded-2xl bg-white border border-warmgray-100 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warmgray-700 focus-visible:ring-offset-2"

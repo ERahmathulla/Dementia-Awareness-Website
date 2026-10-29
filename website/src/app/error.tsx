@@ -23,7 +23,7 @@ export default function GlobalError({
         </div>
         <h1 className="text-3xl font-bold text-warmgray-900 mb-3">Something went wrong</h1>
         <p className="text-warmgray-500 mb-8 max-w-md mx-auto">
-          We encountered an error loading this page. Try refreshing, or call the helpline if you need immediate help.
+          We encountered an error loading this page. Try refreshing, or call the Alzheimer's Association 24/7 Helpline if you need help right away.
         </p>
         <div className="flex items-center justify-center gap-3 flex-wrap">
           <button onClick={reset} className="btn-primary">
@@ -33,7 +33,7 @@ export default function GlobalError({
           <Link href="/" className="btn-secondary">Back to Home</Link>
         </div>
         <p className="text-sm text-warmgray-400 mt-6">
-          Helpline: <a href="tel:+18503862778" className="text-warmgray-800 hover:text-warmgray-900 font-medium">(850) 386-2778</a>
+          24/7 Alzheimer's Association Helpline: <a href="tel:+18002723900" className="text-warmgray-800 hover:text-warmgray-900 font-medium">800-272-3900</a>
         </p>
       </div>
     </div>

@@ -9,7 +9,7 @@ import MapStorySection from '@/components/home/MapStorySection'
 import EmergencyCallout from '@/components/content/EmergencyCallout'
 import NewsletterSignup from '@/components/forms/NewsletterSignup'
 import { FadeIn } from '@/components/ui/FadeIn'
-import { SITE_NAME, SITE_DESCRIPTION, HELPLINE_PHONE } from '@/lib/utils/constants'
+import { SITE_NAME, SITE_DESCRIPTION, ALZ_ASSOCIATION_HELPLINE } from '@/lib/utils/constants'
 
 export const metadata: Metadata = {
   title: `${SITE_NAME} — Dementia & Memory Care Resources`,
@@ -101,18 +101,17 @@ export default function Home() {
                 Start here
                 <ArrowRight className="w-5 h-5" aria-hidden />
               </Link>
-              <a href={`tel:+18503862778`} className="btn-secondary text-base px-8 py-4">
+              <a href="tel:+18002723900" className="btn-secondary text-base px-8 py-4">
                 <Phone className="w-5 h-5" aria-hidden />
-                Call helpline
+                24/7 Alzheimer's Association Helpline
               </a>
             </div>
 
             <p className="text-sm text-warmgray-400">
-              Free helpline:{' '}
-              <a href="tel:+18503862778" className="text-warmgray-800 font-semibold hover:text-warmgray-900 transition-colors">
-                {HELPLINE_PHONE}
+              24/7 Alzheimer's Association Helpline:{' '}
+              <a href="tel:+18002723900" className="text-warmgray-800 font-semibold hover:text-warmgray-900 transition-colors">
+                {ALZ_ASSOCIATION_HELPLINE}
               </a>
-              {' '}· Mon–Fri 9am–5pm
             </p>
           </div>
         </div>

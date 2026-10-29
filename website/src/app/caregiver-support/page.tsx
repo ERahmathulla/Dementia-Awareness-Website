@@ -70,7 +70,7 @@ export default function CaregiverPage() {
           <div>
             <p className="text-sm font-semibold text-warmgray-900 mb-0.5">All support groups listed here are free and no RSVP is required.</p>
             <p className="text-sm text-warmgray-800">
-              Questions? Call the <strong>Alzheimer's Project</strong> at{' '}
+              Questions about support groups? Call the <strong>Alzheimer's Project</strong> at{' '}
               <a href="tel:+18503862778" className="font-semibold underline hover:text-warmgray-900 transition-colors">(850) 386-2778</a>
             </p>
           </div>

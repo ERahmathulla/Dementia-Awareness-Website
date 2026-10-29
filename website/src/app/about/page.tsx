@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 const featuredOrgs = [
-  { name: "Alzheimer's Project", abbr: 'AP', url: 'https://alzheimersproject.org', phone: '(850) 386-2778', desc: "Helpline, day respite, support groups, caregiver education, and the region's memory care backbone." },
+  { name: "Alzheimer's Project", abbr: 'AP', url: 'https://alzheimersproject.org', phone: '(850) 386-2778', desc: "Day respite, support groups, caregiver education, and the region's memory care backbone." },
   { name: 'TMH Memory Disorder Clinic', abbr: 'TMH MDC', url: 'https://tmh.org', phone: '(850) 431-5001', desc: 'State-designated Memory Disorder Clinic: neurological evaluation, neuropsychological testing, social-work support.' },
   { name: 'FSU REACH', abbr: 'REACH', url: 'https://reach.med.fsu.edu', phone: null, email: 'connect.reach@med.fsu.edu', desc: 'Research, education, and community engagement on aging and dementia. Resource portal and symposia.' },
   { name: 'Advantage Aging Solutions', abbr: 'AAA', url: 'https://advantageaging.org', phone: '(850) 488-0055', desc: 'Area Agency on Aging: Elder Helpline, SHINE, CCE/HCE/ADI intake, TCARE caregiver support.' },
